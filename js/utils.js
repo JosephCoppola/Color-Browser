@@ -5,11 +5,15 @@ var app = app || {};
 
 app.utils = function(){
 
+	var dragging = false;
+
 	/*
 	Function Name: clamp(val, min, max)
 	Return Value: returns a value that is constrained between min and max (inclusive) 
 	*/
 	function clamp(val, min, max){
+	//debugger;
+	console.log(val + " " + max);
 		return Math.max(min, Math.min(max, val));
 	}
 	
@@ -23,9 +27,25 @@ app.utils = function(){
 	
 	//Sends in a current value with its current range and map it within a new range
 	function mapValue(value,fromLow,fromHigh,toLow,toHigh){
+		//console.log("V:" + value + " Low:" + fromLow + " High:" + fromHigh + " toLow:" + toLow + " toHigh:" + toHigh);
+		//console.log((value-fromLow) * (toHigh - toLow)/(fromHigh - fromLow) + toLow);
 		return(value-fromLow) * (toHigh - toLow)/(fromHigh - fromLow) + toLow;
 	}
 	
+	function mouseContains(x,y,height,width,mouseX,mouseY){
+		
+		//console.log("x:" + x + " y:" + y + " MX:" + mouseX + " MY:" + mouseY);
+		
+		if(mouseX < x + width && mouseX > x && mouseY < y + height && mouseY > y)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	/*
 		Function Name: getRandomInt(min, max)
 		Return Value: a random integer between min and max
@@ -34,21 +54,12 @@ app.utils = function(){
 	  return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 	
-	// Function Name: getMouse(e)
-	// returns mouse position in local coordinate system of element
-	function getMouse(e){
-		var mouse = {}
-		mouse.x = e.pageX - e.target.offsetLeft;
-		mouse.y = e.pageY - e.target.offsetTop;
-		return mouse;
-	}
-	
 	// the "public interface" of this module
 	return{
 		clamp : clamp,
 		getRandom : getRandom,
 		getRandomInt : getRandomInt,
-		getMouse : getMouse,
-		mapValue : mapValue
+		mapValue : mapValue,
+		mouseContains : mouseContains
 	};
 }(); 
