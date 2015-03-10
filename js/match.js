@@ -11,6 +11,7 @@ app.match = {
 	// CONSTANT properties
     WIDTH : 640, 
     HEIGHT: 480,
+	SLIDERPADDING: 20,
 
 	colorMatches : [],
     canvas: undefined,
@@ -35,7 +36,6 @@ app.match = {
 			this.rgbValues.blue = "0"
 
 			this.update();
-			
 	},
 	
 	update: function(){
@@ -52,9 +52,29 @@ app.match = {
 	drawSprites: function(){
 		this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 		
-		//Sliders (ctx,x,y,col,currVal,maxX) forLoop needed
-		this.drawLib.slider(this.ctx,50,300,"red",app.utils.mapValue(this.rgbValues.red,0,256,50,150),150);
-		this.drawLib.slider(this.ctx,170,300,"green",app.utils.mapValue(this.rgbValues.green,0,256,170,270),150);
-		this.drawLib.slider(this.ctx,280,300,"blue",app.utils.mapValue(this.rgbValues.blue,0,256,280,380),150);
+		for(var i = 1; i < 4; i++) {
+			
+			var sliderColor;
+			
+			switch(i)
+			{
+				case 1: 
+					sliderColor = "red"; 
+					break;
+				case 2: 
+					sliderColor = "green"; 
+					break;
+				case 3: 
+					sliderColor = "blue"; 
+					break;
+				default: 
+					break;
+			}
+			
+			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues.red,0,256,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 80,0));
+		}
+		
+		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,"blue");
+		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,"blue");
 	},
 }; // end app.match

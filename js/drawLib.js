@@ -36,4 +36,15 @@ app.drawLib = {
 			ctx.restore();
 			this.rect(ctx,currVal,y - 7.5,15,15,col);
 		},
+		
+		//Elements that will be drawn to the screen
+		feedbackColor: function(ctx,x,y,col){
+			ctx.save();
+			ctx.fillStyle = col;
+			ctx.beginPath();
+			ctx.arc(x,y,60,0,2*Math.PI,false);
+			ctx.stroke();
+			ctx.fill();
+			ctx.restore();
+		}
 	};
