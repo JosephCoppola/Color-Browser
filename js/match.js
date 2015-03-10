@@ -31,9 +31,9 @@ app.match = {
 			this.canvas.width = this.WIDTH;
 			this.canvas.height = this.HEIGHT;
 			this.ctx = this.canvas.getContext('2d');
-			this.rgbValues.red = "0"
-			this.rgbValues.green = "0"
-			this.rgbValues.blue = "0"
+			this.rgbValues[0] = "0"
+			this.rgbValues[1] = "0"
+			this.rgbValues[2] = "0"
 
 			this.update();
 	},
@@ -71,7 +71,7 @@ app.match = {
 					break;
 			}
 			
-			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues.red,0,256,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 80,0));
+			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues[i - 1],0,256,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 80,0));
 		}
 		
 		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,"blue");
