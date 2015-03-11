@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Joe Coppola's 330 Webpage</title>
+	<style type="text/css">
+	html{
+		background-color: #7DA570;	
+	}
+	
+	#personal{
+		background-color: #0B6A56;
+		width: 99.3%;
+		height: 700px;
+		text-align: left;
+		color: #7DA570;
+		font-size: 100%;
+		padding: 5px;
+	}
+	
+	canvas{
+		width:100%;
+		text-align: center;
+	}
+	
+	p{
+		margin-top: 40px;
+		font-size: 135%;
+		padding: 5px;
+	}
+	
+	h3{
+		color: #7DA570;
+		font-size: 75%;
+		margin-top: 0px;
+		margin-bottom: 40px;
+	}
+	
+	.link{
+		position: relative;
+	}
+	</style>
+	
+		<script>
+		'use strict';
+		
+		window.onload = init;
+		window.addEventListener('resize', draw, false);
+		
+		var canvas;
+		var ctx;
+		var blurbDiv;
+		
+		function init(){
+			console.log('init called');
+			
+			canvas = document.querySelector('canvas');
+			//blurbDiv = document.getElementById("blurb");
+			ctx = canvas.getContext('2d');
+			
+			draw();
+			
+			ctx.save();
+		}
+		
+		function draw() {
+		
+			//console.log(blurbDiv.style.height);
+		
+			//if(window.innerWidth < 1700)
+			//{
+			//	blurbDiv.style.maxWidth = "900px";
+			//}
+		
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			
+			ctx.fillStyle = '#0B6A56';
+
+			ctx.fillRect(0,0,canvas.width,100);
+			
+			ctx.font = 'bold 60pt Times New Roman';
+			
+			ctx.fillStyle = '#7DA570';
+			
+			ctx.fillText('Color-Browser',canvas.width/2,50);
+		}
+	</script>
+
+	
+</head>
+<body>
+	<div id = "header">
+		<canvas width="2000" height="100">
+			Your browser doesn't support canvas
+		</canvas>
+	</div>
+	
+	<div id = "content">
+		<div id = "personal">
+			<img src ="images/game.jpg" height = "180" width = "320" style = "float: right; padding: 5px">
+			<p>For this project, I decided to digitally adapt a game that I had made for my physical computing and alternative interfaces class. The objective of the game was to match the RGB values of one color. The arduino version just
+			keeps generating random colors and goes forever. This game would have a lot more features, and will be playable with friends. The game falls within the casual puzzle genre. If all goes well the game will be made for computer browsers and
+			will be optimized for mobile devices with touch controls. The game will have a random mode where the player will be able to just constantly guess colors, in spirit of the original game. Additional modes would be VS modes where friends
+			can make colors up for the player to guess, and a speed mode where the player can see how many guesses they can get before time is up. This game will have limited images used, and will be a majority of canvas drawing.</p>
+			
+			<img src = "images/Milestone1.PNG"  height = "300" width = "600" style = "float: left; padding: 5px">
+			<h1 style = "text-align: center;">Milestone1</h1>
+			<a href = "match.html" style = "padding-left: 8.45cm;">Click here for Milestone1</a>
+			<p>For this first milestone I established a majority of the game modules and began flushing out the draw code. This game is going to use in canvas sliders, so I started working on the code for the sliders to adjust accordingly.
+			One function I created was the mapValue function, that takes the value between two numbers and converts it properly to a different range. I started working out how the sliders would display, as well as the circles. One circle
+			is going to be the color one has to guess, while the second circle will reflect the RGB values you have selected. At the moment it is set up as placeholders, but in time will reflect the proper color. At this moment, the only slider
+			that sort of works is the blue slider. The collision detection is a bit broken too, so that needs to be worked out. But the basic idea is set and laid out.</p>
+			
+		</div>
+	</div>
+	
+</body>
+</html>

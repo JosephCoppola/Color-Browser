@@ -37,7 +37,7 @@ app.match = {
 			this.rgbValues[1] = "0";
 			this.rgbValues[2] = "0";
 			
-			this.canvas.onmousedown = this.doMousedown;
+			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			
@@ -84,7 +84,7 @@ app.match = {
 		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,"blue");
 	},
 	
-	doMousedown: function(e){
+	doMouseDown: function(e){
 		console.log(e.type);
 		
 		app.dragging = true;
@@ -115,12 +115,36 @@ app.match = {
 		}
 	},	
 	
+	doMouseUp: function(e){
+		console.log("UP");
+		app.dragging = false;
+		app.selectedSlider = undefined;
+	},
+	
 	doMouseMove: function(e){
 		//console.log("Moving");
 		if(app.dragging)
 		{
-			console.log("Dragging");
-			if(app.match.selectedSlider == 3)
+			if(app.match.selectedSlider == 1)
+			{
+				var mouse = app.match.getMouse(e);
+
+				//debugger;
+				if(mouse.x > app.match.WIDTH * (1/3 * 1) - 180 && mouse.x < app.match.WIDTH * (1/3 * 1) - 40)
+				{
+					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 1) - 180,app.match.WIDTH * (1/3 * 1) - 80,0,256);
+				}
+			}
+			else if(app.match.selectedSlider == 2)
+			{
+				var mouse = app.match.getMouse(e);
+
+				if(mouse.x > app.match.WIDTH * (1/3 * 2) - 180 && mouse.x < app.match.WIDTH * (1/3 * 2) - 40)
+				{
+					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 2) - 180,app.match.WIDTH * (1/3 * 2) - 80,0,256);
+				}
+			}
+			else if(app.match.selectedSlider == 3)
 			{
 				var mouse = app.match.getMouse(e);
 

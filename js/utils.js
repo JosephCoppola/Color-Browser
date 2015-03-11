@@ -36,7 +36,7 @@ app.utils = function(){
 		
 		//console.log("x:" + x + " y:" + y + " MX:" + mouseX + " MY:" + mouseY);
 		
-		if(mouseX < x + width && mouseX > x && mouseY < y + height && mouseY > y)
+		if(mouseX < x + width + 5 && mouseX > x - 5 && mouseY < y + height + 5 && mouseY > y - 5)
 		{
 			return true;
 		}
