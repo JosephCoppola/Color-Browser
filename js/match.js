@@ -41,6 +41,9 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			
+			//Set initial guess
+			this.colorMatches = this.utils.setRandomColorAnswer();
+			
 			this.update();
 	},
 	
@@ -58,6 +61,7 @@ app.match = {
 	drawSprites: function(){
 		this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 		
+		//Draw sliders
 		for(var i = 1; i < 4; i++) {
 			
 			var sliderColor;
@@ -80,10 +84,12 @@ app.match = {
 			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues[i - 1],0,256,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 80,0));
 		}
 		
-		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,"blue");
+		//Draw color circles
+		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
 		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
 	},
 	
+	//All mouse functions
 	doMouseDown: function(e){
 		console.log(e.type);
 		
@@ -153,7 +159,6 @@ app.match = {
 				{
 					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 80,0,256);
 				}
-				//app.utils.clamp(app.utils.mapValue(app.match.rgbValues[2],0,256,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 80),app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 80);
 			}
 		}
 	},

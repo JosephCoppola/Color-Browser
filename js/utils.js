@@ -60,6 +60,60 @@ app.utils = function(){
 	  return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 	
+	//Sets a random guess color that also prevents white color to be a guess color
+	function setRandomColorAnswer()
+	{
+	  var redAnswer = this.getRandomInt(-50,255);
+	  var greenAnswer = this.getRandomInt(-50,255);
+	  var blueAnswer =  this.getRandomInt(-50,255);
+	  
+	  var possibleWhite = 0;
+	  
+	  if(redAnswer < 0)
+	  {
+		redAnswer = 0;
+	  }
+	  else if(redAnswer > 100)
+	  {
+		possibleWhite++;
+	  }
+	  if(greenAnswer < 0)
+	  {
+		greenAnswer = 0;
+	  }
+	  else if(greenAnswer > 100)
+	  {
+		possibleWhite++;
+	  }
+	  if(blueAnswer < 0)
+	  {
+		blueAnswer = 0;
+	  }
+	  else if(blueAnswer > 100)
+	  {
+		possibleWhite++;
+	  }
+
+	  if(possibleWhite == 3)
+	  {
+		var randomColorToZero = Math.random(0,2);
+		
+		switch(randomColorToZero)
+		{
+		  case 0: redAnswer = 0; break;
+		  case 1: greenAnswer = 0; break;
+		  case 2: blueAnswer = 0; break;
+		  default: break;
+		}
+	  }
+	  
+	  var color = [redAnswer,greenAnswer,blueAnswer];
+	  
+	  //console.log(redAnswer + " "+ greenAnswer + "" + blueAnswer);
+	  
+	  return color;
+}
+	
 	// the "public interface" of this module
 	return{
 		clamp : clamp,
@@ -67,6 +121,7 @@ app.utils = function(){
 		getRandomInt : getRandomInt,
 		mapValue : mapValue,
 		mouseContains : mouseContains,
-		makeColor : makeColor
+		makeColor : makeColor,
+		setRandomColorAnswer: setRandomColorAnswer
 	};
 }(); 
