@@ -81,7 +81,7 @@ app.match = {
 					break;
 			}
 			
-			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues[i - 1],0,256,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 80,0));
+			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues[i - 1],0,255,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 40));
 		}
 		
 		//Draw color circles
@@ -97,10 +97,11 @@ app.match = {
 		var mouse = {}
 		mouse.x = e.pageX - e.target.offsetLeft;
 		mouse.y = e.pageY - e.target.offsetTop;
+		//console.log(mouse.x);
 		for(var i = 1; i < 4; i++)
 		{
 		//debugger;
-			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,256,app.match.WIDTH * (1/3 * i) - 180,app.match.WIDTH * (1/3 * i) - 80),380,15,15,mouse.x,mouse.y))
+			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.match.WIDTH * (1/3 * i) - 180,app.match.WIDTH * (1/3 * i) - 40),380,15,15,mouse.x,mouse.y))
 			{
 				if(i==1)
 				{
@@ -121,12 +122,6 @@ app.match = {
 		}
 	},	
 	
-	doMouseUp: function(e){
-		console.log("UP");
-		app.dragging = false;
-		app.selectedSlider = undefined;
-	},
-	
 	doMouseMove: function(e){
 		//console.log("Moving");
 		if(app.dragging)
@@ -138,7 +133,7 @@ app.match = {
 				//debugger;
 				if(mouse.x > app.match.WIDTH * (1/3 * 1) - 180 && mouse.x < app.match.WIDTH * (1/3 * 1) - 40)
 				{
-					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 1) - 180,app.match.WIDTH * (1/3 * 1) - 80,0,256);
+					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 1) - 180,app.match.WIDTH * (1/3 * 1) - 40,0,255);
 				}
 			}
 			else if(app.match.selectedSlider == 2)
@@ -147,7 +142,7 @@ app.match = {
 
 				if(mouse.x > app.match.WIDTH * (1/3 * 2) - 180 && mouse.x < app.match.WIDTH * (1/3 * 2) - 40)
 				{
-					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 2) - 180,app.match.WIDTH * (1/3 * 2) - 80,0,256);
+					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 2) - 180,app.match.WIDTH * (1/3 * 2) - 40,0,255);
 				}
 			}
 			else if(app.match.selectedSlider == 3)
@@ -157,12 +152,20 @@ app.match = {
 				//debugger;
 				if(mouse.x > app.match.WIDTH * (1/3 * 3) - 180 && mouse.x < app.match.WIDTH * (1/3 * 3) - 40)
 				{
-					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 80,0,256);
+					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 40,0,255);
+					//console.log(app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 80,0,255));
+					console.log(app.match.rgbValues[2]);
 				}
 			}
 		}
 	},
 
+	doMouseUp: function(e){
+		//console.log("UP");
+		app.dragging = false;
+		app.selectedSlider = undefined;
+	},
+	
 	getMouse: function(e){
 		var mouse = {}
 		var rect = app.match.canvas.getBoundingClientRect();

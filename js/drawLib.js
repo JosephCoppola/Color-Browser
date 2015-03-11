@@ -25,10 +25,10 @@ app.drawLib = {
 		//Slider that will be made in canvas using initial x and y
 		//with a set width of 100. Then depending on the current value the slider
 		//will draw the rect where necessary
-		slider: function(ctx,x,y,col,currVal,maxX){
+		slider: function(ctx,x,y,col,currVal){
 			ctx.save();
 			ctx.strokeStyle = "black";
-			ctx.lineWidth = 10;
+			ctx.lineWidth = 8;
 			ctx.beginPath();
 			ctx.moveTo(x,y);
 			ctx.lineTo(x+150,y);
