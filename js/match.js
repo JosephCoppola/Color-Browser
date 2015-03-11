@@ -81,7 +81,7 @@ app.match = {
 		}
 		
 		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,"blue");
-		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,"blue");
+		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
 	},
 	
 	doMouseDown: function(e){

@@ -32,6 +32,12 @@ app.utils = function(){
 		return(value-fromLow) * (toHigh - toLow)/(fromHigh - fromLow) + toLow;
 	}
 	
+	function makeColor(red, green, blue){
+   			var color='rgb('+red+','+green+','+blue+')';
+			console.log(color);
+   			return color;
+	}
+	
 	function mouseContains(x,y,height,width,mouseX,mouseY){
 		
 		//console.log("x:" + x + " y:" + y + " MX:" + mouseX + " MY:" + mouseY);
@@ -60,6 +66,7 @@ app.utils = function(){
 		getRandom : getRandom,
 		getRandomInt : getRandomInt,
 		mapValue : mapValue,
-		mouseContains : mouseContains
+		mouseContains : mouseContains,
+		makeColor : makeColor
 	};
 }(); 
