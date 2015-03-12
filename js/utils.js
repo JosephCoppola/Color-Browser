@@ -12,8 +12,6 @@ app.utils = function(){
 	Return Value: returns a value that is constrained between min and max (inclusive) 
 	*/
 	function clamp(val, min, max){
-	//debugger;
-	console.log(val + " " + max);
 		return Math.max(min, Math.min(max, val));
 	}
 	
@@ -118,10 +116,36 @@ app.utils = function(){
 	  
 	  var color = [redAnswer,greenAnswer,blueAnswer];
 	  
-	  //console.log(redAnswer + " "+ greenAnswer + "" + blueAnswer);
+	  console.log(redAnswer + " "+ greenAnswer + " " + blueAnswer);
 	  
 	  return color;
-}
+	}
+	
+	function checkAnswer(colorMatches,rgbValues,leeway)
+	{
+		var redC,greenC,blueC;
+		if(rgbValues[0] <= colorMatches[0] + leeway && rgbValues[0] >= colorMatches[0] - leeway)
+		{
+			redC = true;
+		}
+		if(rgbValues[1] <= colorMatches[1] + leeway && rgbValues[1] >= colorMatches[1] - leeway)
+		{
+			greenC = true;
+		}
+		if(rgbValues[2] <= colorMatches[2] + leeway && rgbValues[2] >= colorMatches[2] - leeway)
+		{
+			blueC = true;
+		}
+		
+		if(redC && greenC && blueC)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	// the "public interface" of this module
 	return{
@@ -133,6 +157,7 @@ app.utils = function(){
 		makeColor : makeColor,
 		setRandomColorAnswer: setRandomColorAnswer,
 		findSliderXStart : findSliderXStart,
-		findSliderXEnd : findSliderXEnd
+		findSliderXEnd : findSliderXEnd,
+		checkAnswer : checkAnswer
 	};
 }(); 

@@ -24,6 +24,10 @@ app.match = {
 	sliders : [],
 	dragging : false,
 	selectedSlider : undefined,
+	correct : false,
+	correctCounter : 0,
+	color : undefined,
+
 	
     // methods
 	init : function() {
@@ -50,12 +54,23 @@ app.match = {
 	
 	update: function(){
 		requestAnimationFrame(this.update.bind(this));
+		
 		this.updateSprites();
 		
 		this.drawSprites();
 	},
 	
 	updateSprites: function(){
+		
+		//If correct
+		this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
+		console.log(this.correctCounter);
+		if(this.correct && this.correctCounter == 300)
+		{
+			this.colorMatches = this.utils.setRandomColorAnswer();
+			this.correct = false;
+			this.correctCounter = 0;
+		}
 	
 	},
 	
@@ -86,8 +101,30 @@ app.match = {
 		}
 		
 		//Draw color circles
-		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-		this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+		if(this.correct)
+		{
+			this.correctCounter++;
+			
+			
+			if(this.correctCounter == 50 || this.correctCounter == 150 || this.correctCounter == 250)
+			{
+				this.color = "green";
+			}
+			else if(this.correctCounter == 0 || this.correctCounter == 100 || this.correctCounter == 200)
+			{
+				this.color = "black";
+			}
+			
+			
+			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.color);
+			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.color);
+			
+		}
+		else
+		{
+			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+		}
 	},
 	
 	//All mouse functions
