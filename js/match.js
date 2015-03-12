@@ -40,6 +40,7 @@ app.match = {
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
+			this.canvas.onmouseout = this.doMouseOut;
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
@@ -163,6 +164,12 @@ app.match = {
 
 	doMouseUp: function(e){
 		//console.log("UP");
+		app.dragging = false;
+		app.selectedSlider = undefined;
+	},
+	
+	doMouseOut: function(e){
+		console.log("Out");
 		app.dragging = false;
 		app.selectedSlider = undefined;
 	},
