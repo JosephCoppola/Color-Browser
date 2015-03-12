@@ -81,7 +81,7 @@ app.match = {
 					break;
 			}
 			
-			this.drawLib.slider(this.ctx,this.WIDTH * (1/3 * i) - 180,380,sliderColor,app.utils.mapValue(this.rgbValues[i - 1],0,255,this.WIDTH * (1/3 * i) - 180,this.WIDTH * (1/3 * i) - 40));
+			this.drawLib.slider(this.ctx,this.utils.findSliderXStart(i),380,sliderColor,app.utils.mapValue(this.rgbValues[i - 1],0,255,this.utils.findSliderXStart(i),this.utils.findSliderXEnd(i)));
 		}
 		
 		//Draw color circles
@@ -101,7 +101,7 @@ app.match = {
 		for(var i = 1; i < 4; i++)
 		{
 		//debugger;
-			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.match.WIDTH * (1/3 * i) - 180,app.match.WIDTH * (1/3 * i) - 40),380,15,15,mouse.x,mouse.y))
+			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y))
 			{
 				if(i==1)
 				{
@@ -123,26 +123,28 @@ app.match = {
 	},	
 	
 	doMouseMove: function(e){
-		//console.log("Moving");
 		if(app.dragging)
 		{
 			if(app.match.selectedSlider == 1)
 			{
 				var mouse = app.match.getMouse(e);
 
-				//debugger;
-				if(mouse.x > app.match.WIDTH * (1/3 * 1) - 180 && mouse.x < app.match.WIDTH * (1/3 * 1) - 40)
+				if(mouse.x > app.utils.findSliderXStart(1) && mouse.x < app.utils.findSliderXEnd(1))
 				{
-					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 1) - 180,app.match.WIDTH * (1/3 * 1) - 40,0,255);
+					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(1),app.utils.findSliderXEnd(1),0,255);
 				}
+				//else if(mouse.x < app.utils.findSliderXStart(1))
+				//{
+				//	app.match.rgbValues[0] = 0;
+				//}
 			}
 			else if(app.match.selectedSlider == 2)
 			{
 				var mouse = app.match.getMouse(e);
 
-				if(mouse.x > app.match.WIDTH * (1/3 * 2) - 180 && mouse.x < app.match.WIDTH * (1/3 * 2) - 40)
+				if(mouse.x > app.utils.findSliderXStart(2) && mouse.x < app.utils.findSliderXEnd(2))
 				{
-					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 2) - 180,app.match.WIDTH * (1/3 * 2) - 40,0,255);
+					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(2),app.utils.findSliderXEnd(2),0,255);
 				}
 			}
 			else if(app.match.selectedSlider == 3)
@@ -150,10 +152,9 @@ app.match = {
 				var mouse = app.match.getMouse(e);
 
 				//debugger;
-				if(mouse.x > app.match.WIDTH * (1/3 * 3) - 180 && mouse.x < app.match.WIDTH * (1/3 * 3) - 40)
+				if(mouse.x > app.utils.findSliderXStart(3) && mouse.x < app.utils.findSliderXEnd(3))
 				{
-					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 40,0,255);
-					//console.log(app.utils.mapValue(mouse.x,app.match.WIDTH * (1/3 * 3) - 180,app.match.WIDTH * (1/3 * 3) - 80,0,255));
+					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(3),app.utils.findSliderXEnd(3),0,255);
 					console.log(app.match.rgbValues[2]);
 				}
 			}

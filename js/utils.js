@@ -38,6 +38,15 @@ app.utils = function(){
    			return color;
 	}
 	
+	//Find the sliders far left x position using a parameter to represent which slider it is
+	function findSliderXStart(i){
+		return app.match.WIDTH * (1/3 * i) - 180;
+	}
+	
+	 function findSliderXEnd(i){
+		return app.match.WIDTH * (1/3 * i) - 40;
+	}
+	
 	function mouseContains(x,y,height,width,mouseX,mouseY){
 		
 		//console.log("x:" + x + " y:" + y + " MX:" + mouseX + " MY:" + mouseY);
@@ -122,6 +131,8 @@ app.utils = function(){
 		mapValue : mapValue,
 		mouseContains : mouseContains,
 		makeColor : makeColor,
-		setRandomColorAnswer: setRandomColorAnswer
+		setRandomColorAnswer: setRandomColorAnswer,
+		findSliderXStart : findSliderXStart,
+		findSliderXEnd : findSliderXEnd
 	};
 }(); 
