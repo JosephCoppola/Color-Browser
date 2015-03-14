@@ -147,6 +147,11 @@ app.utils = function(){
 		}
 	}
 	
+	function makeFont(size,type)
+	{
+		return (size + "px " + type);
+	}
+	
 	// the "public interface" of this module
 	return{
 		clamp : clamp,
@@ -158,6 +163,7 @@ app.utils = function(){
 		setRandomColorAnswer: setRandomColorAnswer,
 		findSliderXStart : findSliderXStart,
 		findSliderXEnd : findSliderXEnd,
-		checkAnswer : checkAnswer
+		checkAnswer : checkAnswer,
+		makeFont : makeFont
 	};
 }(); 

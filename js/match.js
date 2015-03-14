@@ -22,6 +22,7 @@ app.match = {
 	app: undefined,
 	rgbValues : [],
 	sliders : [],
+	buttons : [],
 	dragging : false,
 	selectedSlider : undefined,
 	correct : false,
@@ -41,6 +42,8 @@ app.match = {
 			this.rgbValues[1] = "0";
 			this.rgbValues[2] = "0";
 			
+			this.buttons[0] = new app.Button(50,25,"Test","Hard","red",100,50,25);
+			
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
@@ -58,18 +61,31 @@ app.match = {
 		this.updateSprites();
 		
 		this.drawSprites();
+		
+		this.drawGUI(this.ctx);
+	},
+	
+	drawGUI: function(ctx){
+	//GUI drawing here
+		for(var i=0; i < this.buttons.length;i++){
+			this.buttons[i].draw(ctx);
+		}
 	},
 	
 	updateSprites: function(){
 		
 		//If correct
 		this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
-		console.log(this.correctCounter);
+		//console.log(this.correctCounter);
 		if(this.correct && this.correctCounter == 300)
 		{
 			this.colorMatches = this.utils.setRandomColorAnswer();
 			this.correct = false;
 			this.correctCounter = 0;
+		}
+		
+		for(var i=0; i < this.buttons.length;i++){
+			this.buttons[i].update();
 		}
 	
 	},
