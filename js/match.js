@@ -241,7 +241,7 @@ app.match = {
 	doMouseUp: function(e){
 		//console.log("UP");
 		app.match.dragging = false;
-		app.selectedSlider = undefined;
+		app.match.selectedSlider = undefined;
 	},
 	
 	doMouseOut: function(e){
