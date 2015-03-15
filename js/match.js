@@ -28,6 +28,7 @@ app.match = {
 	correct : false,
 	correctCounter : 0,
 	color : undefined,
+	mousePos : [],
 
 	
     // methods
@@ -42,7 +43,7 @@ app.match = {
 			this.rgbValues[1] = "0";
 			this.rgbValues[2] = "0";
 			
-			this.buttons[0] = new app.Button(50,25,"Test","Hard","red",100,50,25);
+			this.buttons[0] = new app.Button(50,25,"Test","Hard","#990000","red",100,50,30);
 			
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
@@ -55,6 +56,7 @@ app.match = {
 			this.update();
 	},
 	
+	//GAME LOOP
 	update: function(){
 		requestAnimationFrame(this.update.bind(this));
 		
@@ -85,7 +87,7 @@ app.match = {
 		}
 		
 		for(var i=0; i < this.buttons.length;i++){
-			this.buttons[i].update();
+			this.buttons[i].update(this.mousePos);
 		}
 	
 	},
@@ -155,7 +157,7 @@ app.match = {
 		for(var i = 1; i < 4; i++)
 		{
 		//debugger;
-			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y))
+			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y,5))
 			{
 				if(i==1)
 				{
@@ -177,12 +179,13 @@ app.match = {
 	},	
 	
 	doMouseMove: function(e){
+
+		var mouse = app.match.getMouse(e);
+
 		if(app.dragging)
 		{
 			if(app.match.selectedSlider == 1)
 			{
-				var mouse = app.match.getMouse(e);
-
 				if(mouse.x > app.utils.findSliderXStart(1) && mouse.x < app.utils.findSliderXEnd(1))
 				{
 					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(1),app.utils.findSliderXEnd(1),0,255);
@@ -194,7 +197,6 @@ app.match = {
 			}
 			else if(app.match.selectedSlider == 2)
 			{
-				var mouse = app.match.getMouse(e);
 
 				if(mouse.x > app.utils.findSliderXStart(2) && mouse.x < app.utils.findSliderXEnd(2))
 				{
@@ -203,7 +205,6 @@ app.match = {
 			}
 			else if(app.match.selectedSlider == 3)
 			{
-				var mouse = app.match.getMouse(e);
 
 				//debugger;
 				if(mouse.x > app.utils.findSliderXStart(3) && mouse.x < app.utils.findSliderXEnd(3))
@@ -213,6 +214,9 @@ app.match = {
 				}
 			}
 		}
+
+		app.match.mousePos = mouse;
+
 	},
 
 	doMouseUp: function(e){

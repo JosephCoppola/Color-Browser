@@ -45,11 +45,11 @@ app.utils = function(){
 		return app.match.WIDTH * (1/3 * i) - 40;
 	}
 	
-	function mouseContains(x,y,height,width,mouseX,mouseY){
+	function mouseContains(x,y,height,width,mouseX,mouseY,leeway){
 		
 		//console.log("x:" + x + " y:" + y + " MX:" + mouseX + " MY:" + mouseY);
 		
-		if(mouseX < x + width + 5 && mouseX > x - 5 && mouseY < y + height + 5 && mouseY > y - 5)
+		if(mouseX < x + width + leeway && mouseX > x - leeway && mouseY < y + height + leeway && mouseY > y - leeway)
 		{
 			return true;
 		}
@@ -151,6 +151,16 @@ app.utils = function(){
 	{
 		return (size + "px " + type);
 	}
+
+	function getCentroid(x,y,width,height)
+	{
+		var centroid = [];
+
+		centroid[0] =  x + width/2;
+		centroid[1] = y + height/2;
+
+		return centroid; 
+	}
 	
 	// the "public interface" of this module
 	return{
@@ -164,6 +174,7 @@ app.utils = function(){
 		findSliderXStart : findSliderXStart,
 		findSliderXEnd : findSliderXEnd,
 		checkAnswer : checkAnswer,
-		makeFont : makeFont
+		makeFont : makeFont,
+		getCentroid : getCentroid
 	};
 }(); 
