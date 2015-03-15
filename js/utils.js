@@ -32,7 +32,7 @@ app.utils = function(){
 	
 	function makeColor(red, green, blue){
    			var color='rgb('+red+','+green+','+blue+')';
-			//console.log(color);
+			console.log(color);
    			return color;
 	}
 	

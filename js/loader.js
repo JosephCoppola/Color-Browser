@@ -26,6 +26,7 @@ window.onload = function(){
 	app.match.app = app;
 	app.match.drawLib = app.drawLib;
 	app.match.utils = app.utils;
+	app.match.buttonControls = app.buttonControls;
 	
 	app.match.init();
 }

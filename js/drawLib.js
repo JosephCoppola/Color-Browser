@@ -43,7 +43,6 @@ app.drawLib = {
 			ctx.fillStyle = col;
 			ctx.beginPath();
 			ctx.arc(x,y,60,0,2*Math.PI,false);
-			ctx.stroke();
 			ctx.fill();
 			ctx.restore();
 		}

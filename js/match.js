@@ -28,7 +28,10 @@ app.match = {
 	correct : false,
 	correctCounter : 0,
 	color : undefined,
+	buttonControls : undefined, 
 	mousePos : [],
+	//Difficulty true: hard false: easy
+	difficulty : true,
 
 	
     // methods
@@ -43,7 +46,7 @@ app.match = {
 			this.rgbValues[1] = "0";
 			this.rgbValues[2] = "0";
 			
-			this.buttons[0] = new app.Button(50,25,"Test","Hard","#990000","red",100,50,30);
+			this.buttons[0] = new app.Button(50,25,"Hard","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 			
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
@@ -68,7 +71,7 @@ app.match = {
 	},
 	
 	drawGUI: function(ctx){
-	//GUI drawing here
+	//GUI drawing here	
 		for(var i=0; i < this.buttons.length;i++){
 			this.buttons[i].draw(ctx);
 		}
@@ -76,8 +79,15 @@ app.match = {
 	
 	updateSprites: function(){
 		
-		//If correct
-		this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
+		//If Hard checking the answer
+		if(this.difficult)
+		{
+			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
+		}
+		else
+		{
+			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5);
+		}
 		//console.log(this.correctCounter);
 		if(this.correct && this.correctCounter == 300)
 		{
@@ -140,8 +150,17 @@ app.match = {
 		}
 		else
 		{
-			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+			//If hard mode
+			if(this.difficulty)
+			{
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+			}
+			else
+			{
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+			}
 		}
 	},
 	
@@ -149,7 +168,7 @@ app.match = {
 	doMouseDown: function(e){
 		console.log(e.type);
 		
-		app.dragging = true;
+		app.match.dragging = true;
 		var mouse = {}
 		mouse.x = e.pageX - e.target.offsetLeft;
 		mouse.y = e.pageY - e.target.offsetTop;
@@ -182,7 +201,7 @@ app.match = {
 
 		var mouse = app.match.getMouse(e);
 
-		if(app.dragging)
+		if(app.match.dragging)
 		{
 			if(app.match.selectedSlider == 1)
 			{
@@ -221,13 +240,13 @@ app.match = {
 
 	doMouseUp: function(e){
 		//console.log("UP");
-		app.dragging = false;
+		app.match.dragging = false;
 		app.selectedSlider = undefined;
 	},
 	
 	doMouseOut: function(e){
 		console.log("Out");
-		app.dragging = false;
+		app.match.dragging = false;
 		app.selectedSlider = undefined;
 	},
 	

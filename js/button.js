@@ -5,7 +5,7 @@ var app = app || {};
 
 app.Button = function(){
 
-	function Button(x,y,id,string,outerColor,innerColor,width,height,fontSize)
+	function Button(x,y,id,string,outerColor,innerColor,width,height,fontSize,doFunction)
 	{
 		this.x = x;
 		this.y = y;
@@ -25,6 +25,8 @@ app.Button = function(){
 		this.checked = false;
 		this.hover = false;
 		this.idle = false;
+		this.released = true;
+		this.doFunction = doFunction;
 	};
 	
 	var b = Button.prototype;
@@ -113,6 +115,13 @@ app.Button = function(){
 				ctx.arc(this.x + this.width,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
 				ctx.fill();
 				ctx.restore();
+				
+				ctx.fillStyle = "black";
+				ctx.font = "bold " + this.utils.makeFont(this.fontSize, "sans-serif");
+				ctx.textAlign="center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(this.string,this.x + this.width/2,this.y + this.height/2);
+				ctx.restore();
 			 }
 		};
 		
@@ -120,18 +129,30 @@ app.Button = function(){
 			//Check if they are being clicked
 			if(this.utils.mouseContains(this.x -this.height/2,this.y,this.height,this.width + this.height,mouse.x,mouse.y,0))
 			{
+				this.lastChecked;
+				
 				if(app.match.dragging)
 				{
 					console.log("clicked");
 					this.checked = true;
+					this.released = false;
 					this.hover = false;
 				}
 				else
 				{
 					this.hover = true;
+					this.released = true;
+					this.checked = false;
+				}
+				
+				if(this.released && !this.checked && this.lastChecked)
+				{
+					this.doFunction();
 				}
 
 				this.idle = false;
+				
+				this.lastChecked = this.checked;
 			}
 			else
 			{
