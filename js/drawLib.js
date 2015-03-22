@@ -45,5 +45,40 @@ app.drawLib = {
 			ctx.arc(x,y,60,0,2*Math.PI,false);
 			ctx.fill();
 			ctx.restore();
+		},
+		
+		//Ingame Buttons
+		drawGameButton: function(ctx,x,y,width,height,string,centroid,outerColor,innerColor,fontSize,sizeMultipler){
+			var innerWidth = width * sizeMultipler;
+			var innerHeight = height * sizeMultipler;
+			var innerX = centroid[0] - innerWidth/2;
+			var innerY = centroid[1] - innerHeight/2;
+			ctx.save();
+			//Outer
+			ctx.fillStyle = outerColor;
+			ctx.fillRect(x,y,width,height);
+			ctx.beginPath();
+			ctx.arc(x,y + height/2,height/2,0,2*Math.PI,false);
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(x + width,y + height/2,height/2,0,2*Math.PI,false);
+			ctx.fill();
+			//Inner 
+			ctx.fillStyle = innerColor;
+			ctx.fillRect(innerX,innerY,innerWidth,innerHeight);
+			ctx.beginPath();
+			ctx.arc(innerX,innerY + innerHeight/2,innerHeight/2,0,2*Math.PI,false);
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(innerX + innerWidth,innerY + innerHeight/2,innerHeight/2,0,2*Math.PI,false);
+			ctx.fill();
+
+			ctx.fillStyle = "black";
+			//Global utils
+			ctx.font = "bold " + app.utils.makeFont(fontSize, "sans-serif");
+			ctx.textAlign="center";
+			ctx.textBaseline = "middle";
+			ctx.fillText(string,x + width/2,y + height/2);
+			ctx.restore();
 		}
 	};

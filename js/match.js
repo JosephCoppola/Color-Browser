@@ -32,6 +32,8 @@ app.match = {
 	mousePos : [],
 	//Difficulty true: hard false: easy
 	difficulty : true,
+	//0 Menu, 1 Practice Matching, 2 Orbital Matching
+	gameState : undefined,
 
 	
     // methods
@@ -45,6 +47,8 @@ app.match = {
 			this.rgbValues[0] = "0";
 			this.rgbValues[1] = "0";
 			this.rgbValues[2] = "0";
+			
+			this.gameState = 1;
 			
 			this.buttons[0] = new app.Button(50,25,"Hard","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 			
@@ -63,11 +67,22 @@ app.match = {
 	update: function(){
 		requestAnimationFrame(this.update.bind(this));
 		
-		this.updateSprites();
+		if(this.gameState == 0)
+		{
+			this.drawMainMenu();
+		}
+		else if(this.gameState == 1)
+		{
+			this.updateSprites();
 		
-		this.drawSprites();
+			this.drawSprites();
 		
-		this.drawGUI(this.ctx);
+			this.drawGUI(this.ctx);
+		}
+	},
+	
+	drawMainMenu: function(ctx){
+		
 	},
 	
 	drawGUI: function(ctx){

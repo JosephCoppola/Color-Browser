@@ -5,6 +5,7 @@ var app = app || {};
 
 app.Button = function(){
 
+	//Ingame buttons 
 	function Button(x,y,id,string,outerColor,innerColor,width,height,fontSize,doFunction)
 	{
 		this.x = x;
@@ -19,6 +20,7 @@ app.Button = function(){
 		this.innerWidth = width * .75;
 		this.innerHeight = height * .75;
 		this.utils = app.utils;
+		this.drawLib = app.drawLib;
 		this.centroid = this.utils.getCentroid(x,y,width,height);
 		this.innerX = this.centroid[0] - this.innerWidth/2;
 		this.innerY = this.centroid[1] - this.innerHeight/2;
@@ -34,94 +36,16 @@ app.Button = function(){
 		b.draw = function(ctx){
 
 			if(this.idle){
-				this.innerWidth = this.width * .75;
-				this.innerHeight = this.height * .75;
-				this.innerX = this.centroid[0] - this.innerWidth/2;
-				this.innerY = this.centroid[1] - this.innerHeight/2;
-				ctx.save();
-				//Outer
-				ctx.fillStyle = this.outerColor;
-				ctx.fillRect(this.x,this.y,this.width,this.height);
-				ctx.beginPath();
-				ctx.arc(this.x,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
-				ctx.fill();
-				ctx.beginPath();
-				ctx.arc(this.x + this.width,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
-				ctx.fill();
-				//Inner 
-				ctx.fillStyle = this.innerColor;
-				ctx.fillRect(this.innerX,this.innerY,this.innerWidth,this.innerHeight);
-				ctx.beginPath();
-				ctx.arc(this.innerX,this.innerY + this.innerHeight/2,this.innerHeight/2,0,2*Math.PI,false);
-				ctx.fill();
-				ctx.beginPath();
-				ctx.arc(this.innerX + this.innerWidth,this.innerY + this.innerHeight/2,this.innerHeight/2,0,2*Math.PI,false);
-				ctx.fill();
-
-				ctx.fillStyle = "black";
-				ctx.font = "bold " + this.utils.makeFont(this.fontSize, "sans-serif");
-				ctx.textAlign="center";
-				ctx.textBaseline = "middle";
-				ctx.fillText(this.string,this.x + this.width/2,this.y + this.height/2);
-				ctx.restore();
+				//drawGameButton: function(ctx,x,y,width,height,string,centroid,outerColor,innerColor,fontSize,sizeMultipler)
+				this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.innerColor,this.fontSize,.75);
 			 }
 			 else if(this.hover && !this.checked)
 			 {
-			 	this.innerWidth = this.width * .8;
-				this.innerHeight = this.height * .8;
-				this.innerX = this.centroid[0] - this.innerWidth/2;
-				this.innerY = this.centroid[1] - this.innerHeight/2;
-			 	ctx.save();
-				//Outer
-				ctx.fillStyle = this.outerColor;
-				ctx.fillRect(this.x,this.y,this.width,this.height);
-				ctx.beginPath();
-				ctx.arc(this.x,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
-				ctx.fill();
-				ctx.beginPath();
-				ctx.arc(this.x + this.width,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
-				ctx.fill();
-				//Inner 
-				ctx.fillStyle = this.innerColor;
-				ctx.fillRect(this.innerX,this.innerY,this.innerWidth,this.innerHeight);
-				ctx.beginPath();
-				ctx.arc(this.innerX,this.innerY + this.innerHeight/2,this.innerHeight/2,0,2*Math.PI,false);
-				ctx.fill();
-				ctx.beginPath();
-				ctx.arc(this.innerX + this.innerWidth,this.innerY + this.innerHeight/2,this.innerHeight/2,0,2*Math.PI,false);
-				ctx.fill();
-
-				ctx.fillStyle = "black";
-				ctx.font = "bold " + this.utils.makeFont(this.fontSize + 4, "sans-serif");
-				ctx.textAlign="center";
-				ctx.textBaseline = "middle";
-				ctx.fillText(this.string,this.x + this.width/2,this.y + this.height/2);
-				ctx.restore();
+				this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.innerColor,this.fontSize + 4,.8);
 			 }
 			 else
 			 {
-			 	this.innerWidth = this.width * .8;
-				this.innerHeight = this.height * .8;
-				this.innerX = this.centroid[0] - this.innerWidth/2;
-				this.innerY = this.centroid[1] - this.innerHeight/2;
-			 	ctx.save();
-				//Outer
-				ctx.fillStyle = this.innerColor;
-				ctx.fillRect(this.x,this.y,this.width,this.height);
-				ctx.beginPath();
-				ctx.arc(this.x,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
-				ctx.fill();
-				ctx.beginPath();
-				ctx.arc(this.x + this.width,this.y + this.height/2,this.height/2,0,2*Math.PI,false);
-				ctx.fill();
-				ctx.restore();
-				
-				ctx.fillStyle = "black";
-				ctx.font = "bold " + this.utils.makeFont(this.fontSize, "sans-serif");
-				ctx.textAlign="center";
-				ctx.textBaseline = "middle";
-				ctx.fillText(this.string,this.x + this.width/2,this.y + this.height/2);
-				ctx.restore();
+			 	this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.outerColor,this.fontSize,.75);
 			 }
 		};
 		
