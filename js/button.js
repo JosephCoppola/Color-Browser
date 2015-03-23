@@ -6,16 +6,28 @@ var app = app || {};
 app.Button = function(){
 
 	//Ingame buttons 
-	function Button(x,y,id,string,outerColor,innerColor,width,height,fontSize,doFunction)
+	function Button(ctx,x,y,id,string,outerColor,innerColor,width,height,fontSize,doFunction)
 	{
-		this.x = x;
-		this.y = y;
 		this.id = id;
+		this.ctx = ctx;
 		this.string = string;
 		this.outerColor = outerColor;
 		this.innerColor = innerColor;
-		this.width = width;
-		this.height = height;
+		this.x = x;
+		this.y = y;
+		if(id == "menu")
+		{
+			ctx.save();
+			ctx.font = "bold " + app.utils.makeFont(fontSize, "sans-serif");
+			this.width = ctx.measureText(string).width;
+			this.height = ctx.measureText("M").width;
+			ctx.restore();
+		}
+		else if(id == "practice")
+		{	
+			this.width = width;
+			this.height = height;
+		}
 		this.fontSize = fontSize;
 		this.utils = app.utils;
 		this.drawLib = app.drawLib;
@@ -36,7 +48,6 @@ app.Button = function(){
 				if(this.idle)
 				{
 					//NEED FUNCTION
-					ctx.fillRect(this.x - this.width/2,this.y - this.height/2,this.width,this.height);
 					ctx.font = "bold " + app.utils.makeFont(this.fontSize, "sans-serif");
 					ctx.textAlign="center";
 					ctx.textBaseline = "middle";
@@ -51,7 +62,7 @@ app.Button = function(){
 				}
 				else
 				{
-				 	 
+				 	 //NEED ACTIVE
 				}
 			}
 			else if(this.id == "practice")
@@ -74,39 +85,62 @@ app.Button = function(){
 		
 		b.update = function(mouse){
 			//Check if they are being clicked
-			if(this.utils.mouseContains(this.x -this.height/2,this.y,this.height,this.width + this.height,mouse.x,mouse.y,0))
+			if(this.id == "menu")
 			{
-				this.lastChecked;
-				
-				if(app.match.dragging)
-				{
-					console.log("clicked");
-					this.checked = true;
-					this.released = false;
-					this.hover = false;
-				}
-				else
-				{
-					this.hover = true;
-					this.released = true;
-					this.checked = false;
-				}
-				
-				if(this.released && !this.checked && this.lastChecked)
-				{
-					this.doFunction();
-				}
+				this.buttonCheck(mouse,this.x - this.width/2,this.y - this.height/2,this.height,this.width)
+			}
+			else if(this.id == "practice")
+			{
+				this.buttonCheck(mouse,this.x - this.height/2,this.y,this.height,this.width + this.height);
+			}
+		};
 
-				this.idle = false;
-				
-				this.lastChecked = this.checked;
+		b.buttonCheck = function(mouse,x,y,height,width)
+		{			
+			//console.log(y);
+			//mousecontains(x,y,height,width,mouseX,mouseY,leeway)
+			if(this.utils.mouseContains(x,y,height,width,mouse.x,mouse.y,0))
+			{
+				//Mouse is within bounds of button
+				//Check what is happening to the button
+				this.buttonLogic();	
 			}
 			else
 			{
+				//Mouse is not near button
 				this.hover = false;
 				this.idle = true;
 				this.checked = false;
 			}
+		};
+
+		b.buttonLogic = function()
+		{
+			this.lastChecked;
+
+			if(app.match.dragging)
+			{
+				console.log("clicked");
+				this.checked = true;
+				this.released = false;
+				this.hover = false;
+			}
+			else
+			{
+				this.hover = true;
+				this.released = true;
+				this.checked = false;
+			}
+			
+			if(this.released && !this.checked && this.lastChecked)
+			{
+				this.doFunction();
+			}
+
+			this.idle = false;
+			
+			this.lastChecked = this.checked;
+
 		};
 	
 	// the "prototype" of this module

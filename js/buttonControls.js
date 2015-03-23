@@ -14,7 +14,7 @@ app.buttonControls = function(){
 			{
 				if(app.match.practiceButtons[i].string == "Easy")
 				{
-					app.match.practiceButtons[i] = new app.Button(50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+					app.match.practiceButtons[i] = new app.Button(app.match.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 				}
 			}
 		}
@@ -24,7 +24,7 @@ app.buttonControls = function(){
 			{
 				if(app.match.practiceButtons[i].string == "Hard")
 				{
-					app.match.practiceButtons[i] = new app.Button(50,25,"practice","Easy","green","#029B26",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+					app.match.practiceButtons[i] = new app.Button(app.match.ctx,50,25,"practice","Easy","green","#029B26",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 				}
 			}
 		}
