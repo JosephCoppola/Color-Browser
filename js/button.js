@@ -17,13 +17,9 @@ app.Button = function(){
 		this.width = width;
 		this.height = height;
 		this.fontSize = fontSize;
-		this.innerWidth = width * .75;
-		this.innerHeight = height * .75;
 		this.utils = app.utils;
 		this.drawLib = app.drawLib;
 		this.centroid = this.utils.getCentroid(x,y,width,height);
-		this.innerX = this.centroid[0] - this.innerWidth/2;
-		this.innerY = this.centroid[1] - this.innerHeight/2;
 		this.checked = false;
 		this.hover = false;
 		this.idle = false;
@@ -35,18 +31,45 @@ app.Button = function(){
 	
 		b.draw = function(ctx){
 
-			if(this.idle){
-				//drawGameButton: function(ctx,x,y,width,height,string,centroid,outerColor,innerColor,fontSize,sizeMultipler)
-				this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.innerColor,this.fontSize,.75);
-			 }
-			 else if(this.hover && !this.checked)
-			 {
-				this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.innerColor,this.fontSize + 4,.8);
-			 }
-			 else
-			 {
-			 	this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.outerColor,this.fontSize,.75);
-			 }
+			if(this.id == "menu")
+			{
+				if(this.idle)
+				{
+					//NEED FUNCTION
+					ctx.fillRect(this.x - this.width/2,this.y - this.height/2,this.width,this.height);
+					ctx.font = "bold " + app.utils.makeFont(this.fontSize, "sans-serif");
+					ctx.textAlign="center";
+					ctx.textBaseline = "middle";
+					ctx.fillStyle = this.outerColor;
+					ctx.fillText(this.string,this.x,this.y);
+				}
+			 	else if(this.hover && !this.checked)
+				{
+					console.log("HOVER")
+					ctx.fillStyle = this.innerColor;
+					ctx.fillText(this.string,this.x,this.y);
+				}
+				else
+				{
+				 	 
+				}
+			}
+			else if(this.id == "practice")
+			{
+				if(this.idle)
+				{
+					//drawGameButton: function(ctx,x,y,width,height,string,centroid,outerColor,innerColor,fontSize,sizeMultipler)
+					this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.innerColor,this.fontSize,.75);
+				}
+			 	else if(this.hover && !this.checked)
+				{
+					this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.innerColor,this.fontSize + 4,.8);
+				}
+				else
+				{
+				 	this.drawLib.drawGameButton(ctx,this.x,this.y,this.width,this.height,this.string,this.centroid,this.outerColor,this.outerColor,this.fontSize,.75);
+				}
+			}
 		};
 		
 		b.update = function(mouse){

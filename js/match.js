@@ -22,7 +22,8 @@ app.match = {
 	app: undefined,
 	rgbValues : [],
 	sliders : [],
-	buttons : [],
+	practiceButtons : [],
+	menuButtons : [],
 	dragging : false,
 	selectedSlider : undefined,
 	correct : false,
@@ -48,9 +49,11 @@ app.match = {
 			this.rgbValues[1] = "0";
 			this.rgbValues[2] = "0";
 			
-			this.gameState = 1;
+			this.gameState = 0;
 			
-			this.buttons[0] = new app.Button(50,25,"Hard","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+			this.practiceButtons[0] = new app.Button(50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+
+			this.menuButtons[0] = new app.Button(this.WIDTH * 2/3,this.HEIGHT * 1/4,"menu","Practice Mode","black","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 			
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
@@ -69,7 +72,13 @@ app.match = {
 		
 		if(this.gameState == 0)
 		{
-			this.drawMainMenu();
+			//NEED FUNCTION
+			for(var i=0; i < this.menuButtons.length;i++)
+			{
+				this.menuButtons[i].update(this.mousePos);
+			}
+
+			this.drawMainMenu(this.ctx);
 		}
 		else if(this.gameState == 1)
 		{
@@ -82,13 +91,17 @@ app.match = {
 	},
 	
 	drawMainMenu: function(ctx){
-		
+		for(var i=0;i < this.menuButtons.length;i++)
+		{
+			this.menuButtons[i].draw(ctx);
+		}
 	},
 	
 	drawGUI: function(ctx){
 	//GUI drawing here	
-		for(var i=0; i < this.buttons.length;i++){
-			this.buttons[i].draw(ctx);
+		for(var i=0; i < this.practiceButtons.length;i++)
+		{
+			this.practiceButtons[i].draw(ctx);
 		}
 	},
 	
@@ -103,7 +116,7 @@ app.match = {
 		{
 			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5);
 		}
-		//console.log(this.correctCounter);
+		
 		if(this.correct && this.correctCounter == 300)
 		{
 			this.colorMatches = this.utils.setRandomColorAnswer();
@@ -111,8 +124,9 @@ app.match = {
 			this.correctCounter = 0;
 		}
 		
-		for(var i=0; i < this.buttons.length;i++){
-			this.buttons[i].update(this.mousePos);
+		for(var i=0; i < this.practiceButtons.length;i++)
+		{
+			this.practiceButtons[i].update(this.mousePos);
 		}
 	
 	},

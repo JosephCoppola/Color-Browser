@@ -10,29 +10,35 @@ app.buttonControls = function(){
 		
 		if(!dif)
 		{
-			for(var i = 0; i < app.match.buttons.length; i++)
+			for(var i = 0; i < app.match.practiceButtons.length; i++)
 			{
-				if(app.match.buttons[i].id == "Easy")
+				if(app.match.practiceButtons[i].string == "Easy")
 				{
-					app.match.buttons[i] = new app.Button(50,25,"Hard","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+					app.match.practiceButtons[i] = new app.Button(50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 				}
 			}
 		}
 		else
 		{
-			for(var i = 0; i < app.match.buttons.length; i++)
+			for(var i = 0; i < app.match.practiceButtons.length; i++)
 			{
-				if(app.match.buttons[i].id == "Hard")
+				if(app.match.practiceButtons[i].string == "Hard")
 				{
-					app.match.buttons[i] = new app.Button(50,25,"Easy","Easy","green","#029B26",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+					app.match.practiceButtons[i] = new app.Button(50,25,"practice","Easy","green","#029B26",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 				}
 			}
 		}
 		console.log(app.match.difficulty);
 	}
+
+	function practiceMode()
+	{
+		app.match.gameState = 1; 
+	}
 	
 	// the "public interface" of this module
 	return{
-		difficulty : difficulty
+		difficulty : difficulty,
+		practiceMode : practiceMode
 	};
 }(); 

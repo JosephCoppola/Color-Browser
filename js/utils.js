@@ -156,7 +156,7 @@ app.utils = function(){
 	{
 		var centroid = [];
 
-		centroid[0] =  x + width/2;
+		centroid[0] = x + width/2;
 		centroid[1] = y + height/2;
 
 		return centroid; 
