@@ -47,18 +47,11 @@ app.Button = function(){
 			{
 				if(this.idle)
 				{
-					//NEED FUNCTION
-					ctx.font = "bold " + app.utils.makeFont(this.fontSize, "sans-serif");
-					ctx.textAlign="center";
-					ctx.textBaseline = "middle";
-					ctx.fillStyle = this.outerColor;
-					ctx.fillText(this.string,this.x,this.y);
+					this.drawLib.drawTextButton(ctx,this.x,this.y,this.string,this.outerColor,this.fontSize);
 				}
 			 	else if(this.hover && !this.checked)
 				{
-					console.log("HOVER")
-					ctx.fillStyle = this.innerColor;
-					ctx.fillText(this.string,this.x,this.y);
+					this.drawLib.drawTextButton(ctx,this.x,this.y,this.string,this.innerColor,this.fontSize + 2);
 				}
 				else
 				{
