@@ -75,15 +75,19 @@ app.match = {
 	update: function(){
 		requestAnimationFrame(this.update.bind(this));
 		
+		//Main Menu
 		if(this.gameState == 0)
 		{
-			//NEED FUNCTION
+			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
+
+			//Draw menu background
+			this.drawLib.drawMenuBackground(this.ctx,this.WIDTH,this.HEIGHT);
+
+			//NEED FUNCTION Check buttons
 			for(var i=0; i < this.menuButtons.length;i++)
 			{
 				this.menuButtons[i].update(this.mousePos);
 			}
-
-			this.drawMainMenu(this.ctx);
 		}
 		else if(this.gameState == 1)
 		{
@@ -91,28 +95,36 @@ app.match = {
 		
 			this.drawSprites();
 		
-			this.drawGUI(this.ctx);
 		}
+
+		this.drawGUI(this.ctx);
 	},
-	
-	drawMainMenu: function(ctx){
-		for(var i=0;i < this.menuButtons.length;i++)
-		{
-			this.menuButtons[i].draw(ctx);
-		}
-	},
-	
+		
 	drawGUI: function(ctx){
 	//GUI drawing here	
-		for(var i=0; i < this.practiceButtons.length;i++)
+
+		if(this.gameState == 0)
 		{
-			this.practiceButtons[i].draw(ctx);
+			for(var i=0;i < this.menuButtons.length;i++)
+			{
+				this.menuButtons[i].draw(ctx);
+			}
+
+
+		}
+		else if(this.gameState == 1)
+		{
+			for(var i=0; i < this.practiceButtons.length;i++)
+			{
+				this.practiceButtons[i].draw(ctx);
+			}
 		}
 	},
 	
 	updateSprites: function(){
 		
 		//If Hard checking the answer
+		//ADJUST LEEWAY FOR HARD MODE
 		if(this.difficult)
 		{
 			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
@@ -163,11 +175,12 @@ app.match = {
 		}
 		
 		//Draw color circles
+		//If correct
 		if(this.correct)
 		{
 			this.correctCounter++;
 			
-			
+			//Correct Animation
 			if(this.correctCounter == 50 || this.correctCounter == 150 || this.correctCounter == 250)
 			{
 				this.color = "green";
