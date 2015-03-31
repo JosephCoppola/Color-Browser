@@ -54,11 +54,11 @@ app.match = {
 			this.practiceButtons[0] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 
 			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
-			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/4,"menu","Practice Mode","black","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 
-			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/2,"menu","Orbital Mode","black","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/4) ,"menu","Orbital Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 			
-			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 3/4,"menu","How To Play","black","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/2),"menu","How To Play","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
@@ -123,7 +123,7 @@ app.match = {
 		
 		//If Hard checking the answer
 		//ADJUST LEEWAY FOR HARD MODE
-		if(this.difficult)
+		if(this.difficulty)
 		{
 			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
 		}

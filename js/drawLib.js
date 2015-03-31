@@ -41,7 +41,7 @@ app.drawLib = {
 		drawMenuBackground: function(ctx,w,h)
 		{
 			//IMAGE WILL BE HERE FOR MENU OVERLAY WITH TITLE
-			this.rect(ctx,(w/4 + 20),(h * 1/4 - 20),280,(h * 3/4) - (h * 1/4) + 40,"white");
+			this.rect(ctx,(w/4 + 20),(h * 1/3 - 20),280,(h * 3/4) - (h * 1/4) + 40,"black");
 
 			ctx.save();
 			ctx.globalCompositeOperation = "overlay";
