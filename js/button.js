@@ -55,7 +55,7 @@ app.Button = function(){
 				}
 				else
 				{
-				 	 //NEED ACTIVE
+				 	 this.drawLib.drawTextButton(ctx,this.x,this.y,this.string,this.innerColor,this.fontSize - 2);
 				}
 			}
 			else if(this.id == "practice")

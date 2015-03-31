@@ -134,6 +134,8 @@ app.match = {
 		
 		if(this.correct && this.correctCounter == 300)
 		{
+			this.canvas.onmousemove = this.doMouseMove;
+			this.canvas.onmousedown = this.doMouseDown;
 			this.colorMatches = this.utils.setRandomColorAnswer();
 			this.correct = false;
 			this.correctCounter = 0;
@@ -176,6 +178,8 @@ app.match = {
 		//If correct
 		if(this.correct)
 		{
+			this.canvas.onmousemove = null;
+			this.canvas.onmousedown = null;
 			this.drawLib.drawCorrectAnimation(this.ctx,this.correctCounter,this.WIDTH);	
 
 			this.correctCounter++;
