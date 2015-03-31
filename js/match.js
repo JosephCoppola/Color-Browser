@@ -109,8 +109,6 @@ app.match = {
 			{
 				this.menuButtons[i].draw(ctx);
 			}
-
-
 		}
 		else if(this.gameState == 1)
 		{
@@ -178,22 +176,9 @@ app.match = {
 		//If correct
 		if(this.correct)
 		{
+			this.drawLib.drawCorrectAnimation(this.ctx,this.correctCounter,this.WIDTH);	
+
 			this.correctCounter++;
-			
-			//Correct Animation
-			if(this.correctCounter == 50 || this.correctCounter == 150 || this.correctCounter == 250)
-			{
-				this.color = "green";
-			}
-			else if(this.correctCounter == 0 || this.correctCounter == 100 || this.correctCounter == 200)
-			{
-				this.color = "black";
-			}
-			
-			
-			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.color);
-			this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.color);
-			
 		}
 		else
 		{

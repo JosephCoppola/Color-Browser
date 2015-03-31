@@ -22,6 +22,22 @@ app.drawLib = {
 			ctx.clearRect(x,y,w,h);
 		},
 
+		drawCorrectAnimation: function(ctx,correctCounter,WIDTH)
+		{
+			//Correct Animation
+			if(correctCounter == 50 || correctCounter == 150 || correctCounter == 250)
+			{
+				this.color = "green";
+			}
+			else if(correctCounter == 0 || correctCounter == 100 || correctCounter == 200)
+			{
+				this.color = "black";
+			}
+			
+			this.feedbackColor(ctx,WIDTH * 1/3,200,this.color);
+			this.feedbackColor(ctx,WIDTH * 2/3,200,this.color);
+		},
+
 		drawMenuBackground: function(ctx,w,h)
 		{
 			//IMAGE WILL BE HERE FOR MENU OVERLAY WITH TITLE
