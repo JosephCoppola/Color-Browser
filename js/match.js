@@ -28,6 +28,7 @@ app.match = {
 	selectedSlider : undefined,
 	correct : false,
 	correctCounter : 0,
+	correctGuesses : 0,
 	color : undefined,
 	buttonControls : undefined, 
 	mousePos : [],
@@ -52,7 +53,8 @@ app.match = {
 			this.gameState = 0;
 			
 			this.practiceButtons[0] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
-
+			this.practiceButtons[1] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+			
 			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
 			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 
@@ -112,6 +114,10 @@ app.match = {
 		}
 		else if(this.gameState == 1)
 		{
+			//CorrectGuesses
+			//drawScore: function(ctx,x,y,score,fontsize)
+			this.drawLib.drawScore(this.ctx,this.WIDTH * .76,this.HEIGHT * .1,this.correctGuesses,27);
+			
 			for(var i=0; i < this.practiceButtons.length;i++)
 			{
 				this.practiceButtons[i].draw(ctx);
@@ -139,6 +145,7 @@ app.match = {
 			this.colorMatches = this.utils.setRandomColorAnswer();
 			this.correct = false;
 			this.correctCounter = 0;
+			this.correctGuesses++;
 		}
 		
 		for(var i=0; i < this.practiceButtons.length;i++)

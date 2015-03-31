@@ -37,6 +37,18 @@ app.drawLib = {
 			this.feedbackColor(ctx,WIDTH * 1/3,200,this.color);
 			this.feedbackColor(ctx,WIDTH * 2/3,200,this.color);
 		},
+		
+		drawScore: function(ctx,x,y,score,fontSize)
+		{
+			ctx.save();
+			ctx.fillStyle = "black";
+			//Global utils
+			ctx.font = "bold " + app.utils.makeFont(fontSize, "sans-serif");
+			ctx.textAlign="center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("Correct Guesses: " + score,x,y);
+			ctx.restore();
+		},
 
 		drawMenuBackground: function(ctx,w,h)
 		{
