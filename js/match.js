@@ -53,7 +53,7 @@ app.match = {
 			this.gameState = 0;
 			
 			this.practiceButtons[0] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
-			this.practiceButtons[1] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+			//this.practiceButtons[1] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 			
 			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
 			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
@@ -133,6 +133,8 @@ app.match = {
 		
 		//If Hard checking the answer
 		//ADJUST LEEWAY FOR HARD MODE
+		//var correctAndAlphas = [];
+
 		if(this.difficulty)
 		{
 			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);

@@ -18,6 +18,11 @@ app.drawLib = {
  			{color:"yellow", stopPercent:.6},
  			{color:"green", stopPercent:.8}),
 
+		gameBackground : new Array(
+			{color:"rgba(170,0,0,.8)", drawCall:2, radius:1 * 200},
+			{color:"rgba(0,170,0,.8)", drawCall:1, radius:2 * 200},
+			{color:"rgba(0,0,170,.8)", drawCall:0, radius:3 * 200}),
+
 		clear : function(ctx,x,y,w,h){
 			ctx.clearRect(x,y,w,h);
 		},
@@ -86,28 +91,47 @@ app.drawLib = {
 			ctx.save();
 			//ctx.globalCompositeOperation = "overlay";
 
-			for(var i=2; i >= 0; i--)
+			for(var j=0; j < this.gameBackground.length; j++)
 			{
-				var stop = [];
-
-				switch(i)
+				this.gameBackground[j].radius--;
+				if(this.gameBackground[j].radius < 0)
 				{
-					case 0: stop.color = "rgba(170,0,0," + rAlpha + ")"; break;
-					case 1: stop.color = "rgba(0,0,170," + gAlpha + ")"; break;
-					case 2: stop.color = "rgba(0,170,0," + bAlpha + ")"; break;
+					this.gameBackground[j].radius = 3 * 200;
 				}
 
-				ctx.fillStyle = stop.color;
-				ctx.beginPath();
-				ctx.arc(w/2,h/2,(i+1) * 110,0,2*Math.PI,false);
-				ctx.fill();
+				if(this.gameBackground[j].radius >= 0 && this.gameBackground[j].radius < 1 * 200)
+				{
+					this.gameBackground[j].drawCall = 2;
+				}
+				else if(this.gameBackground[j].radius >= 1 * 200 && this.gameBackground[j].radius < 2 * 200)
+				{
+					this.gameBackground[j].drawCall = 1;
+				}
+				else
+				{
+					this.gameBackground[j].drawCall = 0;
+				}
+
+				var circle = [];
+
+				for(var i=0; i < this.gameBackground.length; i++)
+				{
+					if(this.gameBackground[i].drawCall == j)
+					{
+						circle.color = this.gameBackground[i].color;
+						circle.radius = this.gameBackground[i].radius;
+					}
+				}
 
 				ctx.fillStyle = "white";
 				ctx.beginPath();
-				ctx.arc(w/2,h/2,(i+1) * 80,0,2*Math.PI,false);
+				ctx.arc(w/2,h/2,circle.radius + 5,0,2*Math.PI,false);
 				ctx.fill();
 
-				ctx.restore();
+				ctx.fillStyle = circle.color;
+				ctx.beginPath();
+				ctx.arc(w/2,h/2,circle.radius,0,2*Math.PI,false);
+				ctx.fill();
 			}
 		},
 	 
