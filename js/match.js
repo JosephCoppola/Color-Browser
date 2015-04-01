@@ -131,13 +131,17 @@ app.match = {
 	
 	updateSprites: function(){
 		
-		//If Hard checking the answer
-		//ADJUST LEEWAY FOR HARD MODE
-		//var correctAndAlphas = [];
+
+		var correctAndAlphas = [];
 
 		if(this.difficulty)
 		{
-			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
+			//If Hard checking the answer
+			//ADJUST LEEWAY FOR HARD MODE
+
+			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
+
+			this.correct = correctAndAlphas.correct;
 		}
 		else
 		{
@@ -161,6 +165,7 @@ app.match = {
 	
 	},
 	
+	//Draw sprites for the practice mode
 	drawSprites: function(){
 		//Draw sliders
 		for(var i = 1; i < 4; i++) {
@@ -189,6 +194,7 @@ app.match = {
 		//If correct
 		if(this.correct)
 		{
+			//Prevent input during correct animation
 			this.canvas.onmousemove = null;
 			this.canvas.onmousedown = null;
 			this.drawLib.drawCorrectAnimation(this.ctx,this.correctCounter,this.WIDTH);	
@@ -200,11 +206,13 @@ app.match = {
 			//If hard mode
 			if(this.difficulty)
 			{
+				//Draw the two circles
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
 			}
 			else
 			{
+				//Draw the two circles next to each other
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
 			}
@@ -213,16 +221,12 @@ app.match = {
 	
 	//All mouse functions
 	doMouseDown: function(e){
-		console.log(e.type);
-		
 		app.match.dragging = true;
 		var mouse = {}
 		mouse.x = e.pageX - e.target.offsetLeft;
 		mouse.y = e.pageY - e.target.offsetTop;
-		//console.log(mouse.x);
 		for(var i = 1; i < 4; i++)
 		{
-		//debugger;
 			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y,5))
 			{
 				if(i==1)
@@ -256,14 +260,9 @@ app.match = {
 				{
 					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(1),app.utils.findSliderXEnd(1),0,255);
 				}
-				//else if(mouse.x < app.utils.findSliderXStart(1))
-				//{
-				//	app.match.rgbValues[0] = 0;
-				//}
 			}
 			else if(app.match.selectedSlider == 2)
 			{
-
 				if(mouse.x > app.utils.findSliderXStart(2) && mouse.x < app.utils.findSliderXEnd(2))
 				{
 					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(2),app.utils.findSliderXEnd(2),0,255);
@@ -271,8 +270,6 @@ app.match = {
 			}
 			else if(app.match.selectedSlider == 3)
 			{
-
-				//debugger;
 				if(mouse.x > app.utils.findSliderXStart(3) && mouse.x < app.utils.findSliderXEnd(3))
 				{
 					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(3),app.utils.findSliderXEnd(3),0,255);
@@ -286,13 +283,11 @@ app.match = {
 	},
 
 	doMouseUp: function(e){
-		//console.log("UP");
 		app.match.dragging = false;
 		app.match.selectedSlider = undefined;
 	},
 	
 	doMouseOut: function(e){
-		console.log("Out");
 		app.match.dragging = false;
 		app.selectedSlider = undefined;
 	},
@@ -302,7 +297,6 @@ app.match = {
 		var rect = app.match.canvas.getBoundingClientRect();
 		mouse.x = e.clientX - rect.left;
 		mouse.y = e.clientY - rect.top;
-		//debugger;
 		return mouse;
 	},
 }; // end app.match

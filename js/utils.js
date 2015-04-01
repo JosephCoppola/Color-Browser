@@ -25,8 +25,6 @@ app.utils = function(){
 	
 	//Sends in a current value with its current range and map it within a new range
 	function mapValue(value,fromLow,fromHigh,toLow,toHigh){
-		//console.log("V:" + value + " Low:" + fromLow + " High:" + fromHigh + " toLow:" + toLow + " toHigh:" + toHigh);
-		//console.log((value-fromLow) * (toHigh - toLow)/(fromHigh - fromLow) + toLow);
 		return(value-fromLow) * (toHigh - toLow)/(fromHigh - fromLow) + toLow;
 	}
 	
@@ -45,10 +43,7 @@ app.utils = function(){
 		return app.match.WIDTH * (1/3 * i) - 40;
 	}
 	
-	function mouseContains(x,y,height,width,mouseX,mouseY,leeway){
-		
-		//console.log("x:" + x + " y:" + y + " MX:" + mouseX + " MY:" + mouseY);
-		
+	function mouseContains(x,y,height,width,mouseX,mouseY,leeway){	
 		if(mouseX < x + width + leeway && mouseX > x - leeway && mouseY < y + height + leeway && mouseY > y - leeway)
 		{
 			return true;
@@ -124,26 +119,33 @@ app.utils = function(){
 	function checkAnswer(colorMatches,rgbValues,leeway)
 	{
 		var redC,greenC,blueC;
+		var correctAndAlphas = [];
+
 		if(rgbValues[0] <= colorMatches[0] + leeway && rgbValues[0] >= colorMatches[0] - leeway)
 		{
 			redC = true;
+			correctAndAlphas.alphas[0] = .8;
 		}
 		if(rgbValues[1] <= colorMatches[1] + leeway && rgbValues[1] >= colorMatches[1] - leeway)
 		{
 			greenC = true;
+			correctAndAlphas.alphas[1] = .8;
 		}
 		if(rgbValues[2] <= colorMatches[2] + leeway && rgbValues[2] >= colorMatches[2] - leeway)
 		{
 			blueC = true;
+			correctAndAlphas.alphas[2] = .8;
 		}
+
 		
+
 		if(redC && greenC && blueC)
 		{
-			return true;
+			correctAndAlphas.correct = true;
 		}
 		else
 		{
-			return false;
+			correctAndAlphas.correct = false;
 		}
 	}
 	
