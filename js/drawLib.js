@@ -80,6 +80,36 @@ app.drawLib = {
 			ctx.fillRect(0,0,w,h);
 			ctx.restore();
 		},
+
+		drawPracticeBackground: function(ctx,w,h,rAlpha,gAlpha,bAlpha)
+		{
+			ctx.save();
+			//ctx.globalCompositeOperation = "overlay";
+
+			for(var i=2; i >= 0; i--)
+			{
+				var stop = [];
+
+				switch(i)
+				{
+					case 0: stop.color = "rgba(170,0,0," + rAlpha + ")"; break;
+					case 1: stop.color = "rgba(0,0,170," + gAlpha + ")"; break;
+					case 2: stop.color = "rgba(0,170,0," + bAlpha + ")"; break;
+				}
+
+				ctx.fillStyle = stop.color;
+				ctx.beginPath();
+				ctx.arc(w/2,h/2,(i+1) * 110,0,2*Math.PI,false);
+				ctx.fill();
+
+				ctx.fillStyle = "white";
+				ctx.beginPath();
+				ctx.arc(w/2,h/2,(i+1) * 80,0,2*Math.PI,false);
+				ctx.fill();
+
+				ctx.restore();
+			}
+		},
 	 
 		rect: function(ctx,x,y,w,h,col){
 			ctx.save();

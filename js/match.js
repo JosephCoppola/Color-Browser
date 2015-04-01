@@ -94,7 +94,11 @@ app.match = {
 		else if(this.gameState == 1)
 		{
 			this.updateSprites();
-		
+			
+			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
+
+			this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,1.0,1.0,1.0);
+
 			this.drawSprites();
 		
 		}
@@ -156,8 +160,6 @@ app.match = {
 	},
 	
 	drawSprites: function(){
-		this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
-		
 		//Draw sliders
 		for(var i = 1; i < 4; i++) {
 			
