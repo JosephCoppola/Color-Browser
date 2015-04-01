@@ -98,14 +98,13 @@ app.match = {
 		}
 		else if(this.gameState == 1)
 		{
-			this.updateSprites();
+			this.updatePractice();
 			
 			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 
 			this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,this.backgroundAlphas);
 
-			this.drawSprites();
-		
+			this.drawPractice();
 		}
 
 		this.drawGUI(this.ctx);
@@ -134,7 +133,7 @@ app.match = {
 		}
 	},
 	
-	updateSprites: function(){
+	updatePractice: function(){
 		
 
 		var correctAndAlphas = [];
@@ -143,7 +142,6 @@ app.match = {
 		{
 			//If Hard checking the answer
 			//ADJUST LEEWAY FOR HARD MODE
-
 			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5,this.difficulty);
 		}
 		else
@@ -151,18 +149,31 @@ app.match = {
 			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,10,this.difficulty);
 		}
 
+		//Set correct if not already correct, used for radius animation
+		//of Practice GUESS Feedback color circle in drawLib 
+		if(!this.correct)
+		{
+			this.correct = correctAndAlphas.correct;
+		}
 
-		this.correct = correctAndAlphas.correct;
 		this.backgroundAlphas = correctAndAlphas.alphas;
 		
 		if(this.correct && this.correctCounter == 300)
 		{
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmousedown = this.doMouseDown;
-			this.colorMatches = this.utils.setRandomColorAnswer();
 			this.correct = false;
 			this.correctCounter = 0;
 			this.correctGuesses++;
+			for(var i = 0; i < this.rgbValues.length; i++)
+			{
+				this.rgbValues[i] = 0;
+			}
+		}
+
+		if(this.correct && this.correctCounter == 200)
+		{
+			this.colorMatches = this.utils.setRandomColorAnswer();
 		}
 		
 		for(var i=0; i < this.practiceButtons.length;i++)
@@ -173,7 +184,7 @@ app.match = {
 	},
 	
 	//Draw sprites for the practice mode
-	drawSprites: function(){
+	drawPractice: function(){
 		//Draw sliders
 		for(var i = 1; i < 4; i++) {
 			
@@ -214,14 +225,14 @@ app.match = {
 			if(this.difficulty)
 			{
 				//Draw the two circles
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
 			}
 			else
 			{
 				//Draw the two circles next to each other
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
 			}
 		}
 	},

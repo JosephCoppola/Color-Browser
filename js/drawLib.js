@@ -33,14 +33,27 @@ app.drawLib = {
 			if(correctCounter == 50 || correctCounter == 150 || correctCounter == 250)
 			{
 				this.color = "green";
+				this.guessColor = "green";
 			}
 			else if(correctCounter == 0 || correctCounter == 100 || correctCounter == 200)
 			{
 				this.color = "black";
-			}
+				this.guessColor = "black";
+			}			
 			
-			this.feedbackColor(ctx,WIDTH * 1/3,200,this.color);
-			this.feedbackColor(ctx,WIDTH * 2/3,200,this.color);
+			this.feedbackColor(ctx,WIDTH * 2/3,200,60,this.color);
+			
+			if(correctCounter >= 150)
+			{
+				var rgbMatches = app.match.colorMatches;
+				var radius = app.utils.mapValue(correctCounter,150,300,0,60);
+				this.guessColor = "rgb(" + rgbMatches[0] + "," + rgbMatches[1] + "," + rgbMatches[2] + ")"; 
+				this.feedbackColor(ctx,WIDTH * 1/3,200,radius,this.guessColor);
+			}
+			else
+			{
+				this.feedbackColor(ctx,WIDTH * 1/3,200,60,this.guessColor);
+			}
 		},
 		
 		drawScore: function(ctx,x,y,score,fontSize)
@@ -162,11 +175,11 @@ app.drawLib = {
 		},
 		
 		//Elements that will be drawn to the screen
-		feedbackColor: function(ctx,x,y,col){
+		feedbackColor: function(ctx,x,y,r,col){
 			ctx.save();
 			ctx.fillStyle = col;
 			ctx.beginPath();
-			ctx.arc(x,y,60,0,2*Math.PI,false);
+			ctx.arc(x,y,r,0,2*Math.PI,false);
 			ctx.fill();
 			ctx.restore();
 		},

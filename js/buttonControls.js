@@ -35,6 +35,11 @@ app.buttonControls = function(){
 	{
 		app.match.gameState = 1; 
 	}
+
+	function skipColor()
+	{
+		
+	}
 	
 	// the "public interface" of this module
 	return{
