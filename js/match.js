@@ -1,7 +1,3 @@
-// Description: singleton object
-// This object will be our main "controller" class and will contain references
-// to most of the other objects in the game.
-
 "use strict";
 
 
@@ -13,25 +9,33 @@ app.match = {
     HEIGHT: 480,
 	SLIDERPADDING: 20,
 
+	//Module
+	app: undefined,
+	//Array of RGB values i,i+1,i+2 is R,G,B
 	colorMatches : [],
+	//Canvas and ctx ref
     canvas: undefined,
     ctx: undefined,
+    //Helper scripts
 	drawLib: undefined,
 	utils: undefined,
+	buttonControls : undefined, 
 	dt: 1/60.0,
-	app: undefined,
+	//Holds Slider Values
 	rgbValues : [],
-	sliders : [],
+	//Button arrays for various game states
 	practiceButtons : [],
 	menuButtons : [],
+	//Alpha values used to draw practice mode background
 	backgroundAlphas : [],
+	//Slider Logic
 	dragging : false,
 	selectedSlider : undefined,
+	//Correct Logic
 	correct : false,
 	correctCounter : 0,
 	correctGuesses : 0,
-	color : undefined,
-	buttonControls : undefined, 
+	//color : undefined,
 	mousePos : [],
 	//Difficulty true: hard false: easy
 	difficulty : true,
@@ -54,13 +58,11 @@ app.match = {
 			this.gameState = 0;
 			
 			this.practiceButtons[0] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
-			//this.practiceButtons[1] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
+			this.practiceButtons[1] = new app.Button(this.ctx,50,this.HEIGHT - 70,"practice","Skip","green","#009900",100,50,30,function(){});
 			
 			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
 			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
-
 			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/4) ,"menu","Orbital Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
-			
 			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/2),"menu","How To Play","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 
 			this.canvas.onmousedown = this.doMouseDown;
@@ -71,7 +73,7 @@ app.match = {
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
 			//Set initial alphas
-			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0).alphas;
+			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 			
 			this.update();
 	},
@@ -142,11 +144,11 @@ app.match = {
 			//If Hard checking the answer
 			//ADJUST LEEWAY FOR HARD MODE
 
-			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
+			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5,this.difficulty);
 		}
 		else
 		{
-			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5);
+			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,10,this.difficulty);
 		}
 
 

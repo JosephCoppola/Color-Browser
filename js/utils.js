@@ -111,47 +111,63 @@ app.utils = function(){
 	  
 	  var color = [redAnswer,greenAnswer,blueAnswer];
 	  
-	  console.log(redAnswer + " "+ greenAnswer + " " + blueAnswer);
+	  //console.log(redAnswer + " "+ greenAnswer + " " + blueAnswer);
 	  
 	  return color;
 	}
 	
-	function checkAnswer(colorMatches,rgbValues,leeway)
+	function checkAnswer(colorMatches,rgbValues,leeway,difficulty)
 	{
 		var redC,greenC,blueC;
 		var correctAndAlphas = {alphas:[]};
 
 		//Check each RGB value with the Color you are matching RGB value based off a certain leeway parameter
-		if(rgbValues[0] <= colorMatches[0] + leeway && rgbValues[0] >= colorMatches[0] - leeway)
+		if(!difficulty)
 		{
-			redC = true;
-			correctAndAlphas.alphas[0] = .8;
+			if(rgbValues[0] <= colorMatches[0] + leeway && rgbValues[0] >= colorMatches[0] - leeway)
+			{
+				redC = true;
+				correctAndAlphas.alphas[0] = .8;
+			}
+			if(rgbValues[1] <= colorMatches[1] + leeway && rgbValues[1] >= colorMatches[1] - leeway)
+			{
+				greenC = true;
+				correctAndAlphas.alphas[1] = .8;
+			}
+			if(rgbValues[2] <= colorMatches[2] + leeway && rgbValues[2] >= colorMatches[2] - leeway)
+			{
+				blueC = true;
+				correctAndAlphas.alphas[2] = .8;
+			}
 		}
-		if(rgbValues[1] <= colorMatches[1] + leeway && rgbValues[1] >= colorMatches[1] - leeway)
+		else
 		{
-			greenC = true;
-			correctAndAlphas.alphas[1] = .8;
-		}
-		if(rgbValues[2] <= colorMatches[2] + leeway && rgbValues[2] >= colorMatches[2] - leeway)
-		{
-			blueC = true;
-			correctAndAlphas.alphas[2] = .8;
-		}
+			if(rgbValues[0] <= colorMatches[0] + leeway && rgbValues[0] >= colorMatches[0] - leeway)
+			{
+				redC = true;
+			}
+			if(rgbValues[1] <= colorMatches[1] + leeway && rgbValues[1] >= colorMatches[1] - leeway)
+			{
+				greenC = true;
+			}
+			if(rgbValues[2] <= colorMatches[2] + leeway && rgbValues[2] >= colorMatches[2] - leeway)
+			{
+				blueC = true;
+			}
 
-		/*
-		//Set the alpha of each RGB value for the background to use
-		for(int i = 0; i < colorMatches.length; i++)
-		{
-			if(rgbValues[i] <= colorMatches[i] + 100 && rgbValues[i] >= colorMatches[i] - 100)
+			//Set the alpha of each RGB value for the background to use
+			for(var i = 0; i < colorMatches.length; i++)
 			{
-				correctAndAlphas.alphas[i] = this.mapValue(Math.abs(rgbValues[i] - colorMatches[i]),0,100,.3,.8);
-			}
-			else
-			{
-				correctAndAlphas.alphas[i] = .3;
+				if(rgbValues[i] <= colorMatches[i] + 100 && rgbValues[i] >= colorMatches[i] - 100)
+				{
+					correctAndAlphas.alphas[i] = this.mapValue(Math.abs(colorMatches[i] - rgbValues[i]),0,100,.8,.3);
+				}
+				else
+				{
+					correctAndAlphas.alphas[i] = .3;
+				}
 			}
 		}
-		*/
 
 		if(redC && greenC && blueC)
 		{
