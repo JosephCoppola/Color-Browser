@@ -119,8 +119,9 @@ app.utils = function(){
 	function checkAnswer(colorMatches,rgbValues,leeway)
 	{
 		var redC,greenC,blueC;
-		var correctAndAlphas = [];
+		var correctAndAlphas = {alphas:[]};
 
+		//Check each RGB value with the Color you are matching RGB value based off a certain leeway parameter
 		if(rgbValues[0] <= colorMatches[0] + leeway && rgbValues[0] >= colorMatches[0] - leeway)
 		{
 			redC = true;
@@ -137,7 +138,20 @@ app.utils = function(){
 			correctAndAlphas.alphas[2] = .8;
 		}
 
-		
+		/*
+		//Set the alpha of each RGB value for the background to use
+		for(int i = 0; i < colorMatches.length; i++)
+		{
+			if(rgbValues[i] <= colorMatches[i] + 100 && rgbValues[i] >= colorMatches[i] - 100)
+			{
+				correctAndAlphas.alphas[i] = this.mapValue(Math.abs(rgbValues[i] - colorMatches[i]),0,100,.3,.8);
+			}
+			else
+			{
+				correctAndAlphas.alphas[i] = .3;
+			}
+		}
+		*/
 
 		if(redC && greenC && blueC)
 		{
@@ -147,6 +161,8 @@ app.utils = function(){
 		{
 			correctAndAlphas.correct = false;
 		}
+
+		return correctAndAlphas;
 	}
 	
 	function makeFont(size,type)

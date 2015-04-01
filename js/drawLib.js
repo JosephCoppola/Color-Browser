@@ -86,8 +86,12 @@ app.drawLib = {
 			ctx.restore();
 		},
 
-		drawPracticeBackground: function(ctx,w,h,rAlpha,gAlpha,bAlpha)
+		drawPracticeBackground: function(ctx,w,h,alphas)
 		{
+			this.gameBackground[0].color = "rgba(170,0,0," + alphas[0] + ")";
+			this.gameBackground[1].color = "rgba(0,170,0," + alphas[1] + ")";
+			this.gameBackground[2].color = "rgba(0,0,170," + alphas[2] + ")";
+
 			ctx.save();
 			//ctx.globalCompositeOperation = "overlay";
 

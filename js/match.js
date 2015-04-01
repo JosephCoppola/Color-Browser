@@ -24,6 +24,7 @@ app.match = {
 	sliders : [],
 	practiceButtons : [],
 	menuButtons : [],
+	backgroundAlphas : [],
 	dragging : false,
 	selectedSlider : undefined,
 	correct : false,
@@ -69,6 +70,8 @@ app.match = {
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
+			//Set initial alphas
+			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0).alphas;
 			
 			this.update();
 	},
@@ -97,7 +100,7 @@ app.match = {
 			
 			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 
-			this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,1.0,1.0,1.0);
+			this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,this.backgroundAlphas);
 
 			this.drawSprites();
 		
@@ -140,13 +143,15 @@ app.match = {
 			//ADJUST LEEWAY FOR HARD MODE
 
 			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,40);
-
-			this.correct = correctAndAlphas.correct;
 		}
 		else
 		{
-			this.correct = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5);
+			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5);
 		}
+
+
+		this.correct = correctAndAlphas.correct;
+		this.backgroundAlphas = correctAndAlphas.alphas;
 		
 		if(this.correct && this.correctCounter == 300)
 		{
