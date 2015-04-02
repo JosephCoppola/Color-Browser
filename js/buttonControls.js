@@ -38,12 +38,19 @@ app.buttonControls = function(){
 
 	function skipColor()
 	{
-		
+		app.match.colorMatches = app.utils.setRandomColorAnswer();
+	}
+
+	function pause()
+	{
+
 	}
 	
 	// the "public interface" of this module
 	return{
 		difficulty : difficulty,
-		practiceMode : practiceMode
+		practiceMode : practiceMode,
+		skipColor : skipColor,
+		pause : pause
 	};
 }(); 

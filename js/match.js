@@ -58,7 +58,8 @@ app.match = {
 			this.gameState = 0;
 			
 			this.practiceButtons[0] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
-			this.practiceButtons[1] = new app.Button(this.ctx,50,this.HEIGHT - 70,"practice","Skip","green","#009900",100,50,30,function(){});
+			this.practiceButtons[1] = new app.Button(this.ctx,50,this.HEIGHT - 70,"practice","Skip","green","#009900",100,50,30,function(){app.buttonControls.skipColor()});
+			this.practiceButtons[2] = new app.Button(this.ctx,this.WIDTH - 150,this.HEIGHT - 70,"practice","Pause","#0000cc","blue",100,50,30,function(){app.buttonControls.pause()});
 			
 			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
 			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
@@ -171,7 +172,7 @@ app.match = {
 			}
 		}
 
-		if(this.correct && this.correctCounter == 200)
+		if(this.correct && this.correctCounter == 0)
 		{
 			this.colorMatches = this.utils.setRandomColorAnswer();
 		}

@@ -58,13 +58,24 @@ app.drawLib = {
 		
 		drawScore: function(ctx,x,y,score,fontSize)
 		{
+			var string = "Correct Guesses: " + score;
+
 			ctx.save();
+
+			ctx.font = "bold " + app.utils.makeFont(fontSize, "sans-serif");
+
+			var stringWidth = ctx.measureText(string).width;
+
+			//White background
+			ctx.fillStyle = "rgba(255,255,255,.5";
+			ctx.fillRect(x - stringWidth/2 - 2.5,y - ctx.measureText("M").width/2 - 2.5,stringWidth + 5,ctx.measureText("M").width + 5);
+
 			ctx.fillStyle = "black";
 			//Global utils
-			ctx.font = "bold " + app.utils.makeFont(fontSize, "sans-serif");
 			ctx.textAlign="center";
 			ctx.textBaseline = "middle";
-			ctx.fillText("Correct Guesses: " + score,x,y);
+			
+			ctx.fillText(string,x,y);
 			ctx.restore();
 		},
 
