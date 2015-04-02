@@ -17,9 +17,7 @@ app.KEYBOARD = {
 
 app.keydown = {};
 
-app.IMAGES = {
-	
-};
+app.queue
 
 window.onload = function(){
 	console.log("window.onload called");
@@ -28,6 +26,16 @@ window.onload = function(){
 	app.match.drawLib = app.drawLib;
 	app.match.utils = app.utils;
 	app.match.buttonControls = app.buttonControls;
+
+	app.queue = new createjs.LoadQueue(false);
+	app.queue.installPlugin(createjs.Sound);
+
+	app.queue.on("complete",function(){
+		app.match.init();
+	});
+
+	app.queue.loadManifest([
+		{id: "soundtrack", src: "sounds/soundtrack.mp3"},
+	]);
 	
-	app.match.init();
 }

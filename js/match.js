@@ -48,7 +48,6 @@ app.match = {
 	//Time
 	gTime : 0,
 	elapsed : 0,
-	timeAllowed : 0,
 	
     // methods
 	init : function() {
@@ -88,6 +87,8 @@ app.match = {
 			//Set initial alphas
 			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 			
+			this.soundtrack = createjs.Sound.play("soundtrack",{loop:-1,volume:0.4});
+
 			this.update();
 	},
 
@@ -125,6 +126,13 @@ app.match = {
 			}
 
 			this.drawGUI(this.ctx);
+
+			this.ctx.save();
+			this.ctx.fillStyle = "black";
+			this.ctx.font="20px Georgia";
+			this.ctx.fillText("Made by Joe Coppola",this.WIDTH - 100,this.HEIGHT - 35);
+			this.ctx.fillText("Game still under construction! Expect regular updates!",this.WIDTH - 242,this.HEIGHT - 15);
+			this.ctx.restore();
 		}
 		//Practice Mode
 		else if(this.gameState == 1)
