@@ -79,12 +79,42 @@ app.drawLib = {
 			ctx.restore();
 		},
 
-		drawMenuBackground: function(ctx,w,h)
+		drawTime: function(ctx,x,y,time,fontSize)
 		{
-			//IMAGE WILL BE HERE FOR MENU OVERLAY WITH TITLE
-			this.rect(ctx,(w/4 + 20),(h * 1/3 - 20),280,(h * 3/4) - (h * 1/4) + 40,"black");
+			var string = "Time: " + time;
 
 			ctx.save();
+
+			ctx.font = "bold " + app.utils.makeFont(fontSize, "sans-serif");
+
+			var stringWidth = ctx.measureText(string).width;
+
+			//White background
+			ctx.fillStyle = "rgba(255,255,255,.5";
+			ctx.fillRect(x - stringWidth/2 - 2.5,y - ctx.measureText("M").width/2 - 2.5,stringWidth + 5,ctx.measureText("M").width + 5);
+
+			ctx.fillStyle = "black";
+			//Global utils
+			ctx.textAlign="center";
+			ctx.textBaseline = "middle";
+			
+			ctx.fillText(string,x,y);
+			ctx.restore();
+		},
+
+		drawMenuBackground: function(ctx,w,h)
+		{
+			ctx.save();
+
+			this.rect(ctx,(w/4 + 15),h/6 - 5,290,160,"white");
+			this.rect(ctx,(w/4 + 20),h/6,280,150,"black");
+			ctx.font = "bold " + app.utils.makeFont(50, "sans-serif");
+			ctx.fillStyle = "white";
+			ctx.fillText("Match",w/2,h/6 + 25);
+
+			this.rect(ctx,(w/4 + 15),(h * 1/3 - 25),290,(h * 3/4) - (h * 1/4) + 50,"white");
+			this.rect(ctx,(w/4 + 20),(h * 1/3 - 20),280,(h * 3/4) - (h * 1/4) + 40,"black");
+
 			ctx.globalCompositeOperation = "overlay";
 			var gradient = ctx.createRadialGradient(w/2,h/2,0,w/2,w/2,550);
 			

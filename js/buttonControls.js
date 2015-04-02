@@ -36,6 +36,11 @@ app.buttonControls = function(){
 		app.match.gameState = 1; 
 	}
 
+	function playMode()
+	{
+		app.match.gameState = 2;
+	}
+
 	function skipColor()
 	{
 		app.match.colorMatches = app.utils.setRandomColorAnswer();
@@ -56,6 +61,7 @@ app.buttonControls = function(){
 	return{
 		difficulty : difficulty,
 		practiceMode : practiceMode,
+		playMode : playMode,
 		skipColor : skipColor,
 		pause : pause,
 		quit : quit,

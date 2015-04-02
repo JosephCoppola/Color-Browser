@@ -27,6 +27,8 @@ app.match = {
 	practiceButtons : [],
 	menuButtons : [],
 	pauseButtons : [],
+	playButtons : [],
+	levels : [],
 	//Alpha values used to draw practice mode background
 	backgroundAlphas : [],
 	//Slider Logic
@@ -36,13 +38,16 @@ app.match = {
 	correct : false,
 	correctCounter : 0,
 	correctGuesses : 0,
-	//color : undefined,
 	mousePos : [],
 	//Difficulty true: hard false: easy
 	difficulty : true,
 	//0 Menu, 1 Practice Matching, 2 Orbital Matching
 	gameState : undefined,
 	paused : false,
+	//Time
+	gTime : 0,
+	elapsed : 0,
+	timeAllowed : 0,
 	
     // methods
 	init : function() {
@@ -60,8 +65,9 @@ app.match = {
 			this.practiceButtons[1] = new app.Button(this.ctx,50,this.HEIGHT - 70,"practice","Skip","green","#009900",100,50,30,function(){app.buttonControls.skipColor()});
 			this.practiceButtons[2] = new app.Button(this.ctx,this.WIDTH - 150,this.HEIGHT - 70,"practice","Pause","#0000cc","blue",100,50,30,function(){app.buttonControls.pause()});
 			
-			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
-			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Play Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.playButtons[0] = new app.Button(this.ctx,this.WIDTH - 150,this.HEIGHT - 70,"practice","Pause","#0000cc","blue",100,50,30,function(){app.buttonControls.pause()});
+
+			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Play Mode","white","yellow",100,50,35,function(){app.buttonControls.playMode()});
 			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/4) ,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/2),"menu","How To Play","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 
@@ -72,7 +78,7 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmouseout = this.doMouseOut;
-			//window.onblur = function(){app.match.paused = true;};
+			window.onblur = function(){app.match.paused = true;};
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
@@ -113,19 +119,26 @@ app.match = {
 				this.menuButtons[i].update(this.mousePos);
 			}
 		}
+		//Practice Mode
 		else if(this.gameState == 1)
 		{
+			//Not paused
 			if(!this.paused)
 			{
-				this.updatePractice();
+				this.updateGame();
 			
 				this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 
 				this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,this.backgroundAlphas);
 
-				this.drawPractice();
+				this.drawGame();
+
+				for(var i=0; i < this.practiceButtons.length;i++)
+				{
+					this.practiceButtons[i].update(this.mousePos);
+				}
 			}
-			else
+			else //Paused
 			{
 				for(var i=0; i < this.pauseButtons.length;i++)
 				{
@@ -133,9 +146,36 @@ app.match = {
 				}
 			}
 		}
+		//Play Mode
 		else if(this.gameState == 2)
 		{
+			//Not paused
+			if(!this.paused)
+			{
+				this.updateGame();
+			
+				this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 
+				this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,this.backgroundAlphas);
+
+				this.drawGame();
+
+				for(var i=0; i < this.playButtons.length;i++)
+				{
+					this.playButtons[i].update(this.mousePos);
+				}
+
+				this.elapsed++;
+
+				this.gTime = parseInt(this.elapsed * this.dt);
+			}
+			else //paused
+			{
+				for(var i=0; i < this.pauseButtons.length;i++)
+				{
+					this.pauseButtons[i].update(this.mousePos);
+				}
+			}
 		}
 
 		this.drawGUI(this.ctx);
@@ -178,11 +218,35 @@ app.match = {
 				}
 			}
 		}
+		else if(this.gameState == 2)
+		{
+			this.drawLib.drawScore(this.ctx,this.WIDTH * .76,this.HEIGHT * .1,this.correctGuesses,27);
+			this.drawLib.drawTime(this.ctx,this.WIDTH * .12,this.HEIGHT * .1,this.gTime,27);
+
+			for(var i=0; i < this.playButtons.length;i++)
+			{
+				this.playButtons[i].draw(ctx);
+			}
+
+			if(this.paused)
+			{	
+				ctx.save();
+				ctx.fillStyle = "white";
+				ctx.fillRect(this.WIDTH * 1/2 - 100,this.HEIGHT * 1/3 - 35,200,200);
+				ctx.fillStyle = "rgba(0,0,255,.8)";
+				ctx.fillRect(this.WIDTH * 1/2 - 100,this.HEIGHT * 1/3 - 35,200,200);
+				ctx.fillRect(this.WIDTH * 1/2 - 90,this.HEIGHT * 1/3 - 25,180,180);
+				ctx.restore();
+
+				for(var i=0; i < this.pauseButtons.length;i++)
+				{
+					this.pauseButtons[i].draw(ctx);
+				}
+			}
+		}
 	},
 	
-	updatePractice: function(){
-		
-
+	updateGame: function(){
 		var correctAndAlphas = [];
 
 		if(this.difficulty)
@@ -222,16 +286,11 @@ app.match = {
 		{
 			this.colorMatches = this.utils.setRandomColorAnswer();
 		}
-		
-		for(var i=0; i < this.practiceButtons.length;i++)
-		{
-			this.practiceButtons[i].update(this.mousePos);
-		}
 	
 	},
 	
 	//Draw sprites for the practice mode
-	drawPractice: function(){
+	drawGame: function(){
 		//Draw sliders
 		for(var i = 1; i < 4; i++) {
 			
@@ -295,6 +354,7 @@ app.match = {
 		{
 			for(var i = 1; i < 4; i++)
 			{
+				//Check which slider is selected
 				if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y,5))
 				{
 					if(i==1)
