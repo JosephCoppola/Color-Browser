@@ -43,7 +43,13 @@ app.buttonControls = function(){
 
 	function pause()
 	{
+		app.match.paused = !app.match.paused;
+	}
 
+	function quit()
+	{
+		app.match.gameState = 0;
+		app.match.resetGameGlobals(); 
 	}
 	
 	// the "public interface" of this module
@@ -51,6 +57,7 @@ app.buttonControls = function(){
 		difficulty : difficulty,
 		practiceMode : practiceMode,
 		skipColor : skipColor,
-		pause : pause
+		pause : pause,
+		quit : quit,
 	};
 }(); 

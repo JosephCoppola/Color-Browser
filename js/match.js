@@ -26,6 +26,7 @@ app.match = {
 	//Button arrays for various game states
 	practiceButtons : [],
 	menuButtons : [],
+	pauseButtons : [],
 	//Alpha values used to draw practice mode background
 	backgroundAlphas : [],
 	//Slider Logic
@@ -41,7 +42,7 @@ app.match = {
 	difficulty : true,
 	//0 Menu, 1 Practice Matching, 2 Orbital Matching
 	gameState : undefined,
-
+	paused : false,
 	
     // methods
 	init : function() {
@@ -51,9 +52,7 @@ app.match = {
 			this.canvas.width = this.WIDTH;
 			this.canvas.height = this.HEIGHT;
 			this.ctx = this.canvas.getContext('2d');
-			this.rgbValues[0] = "0";
-			this.rgbValues[1] = "0";
-			this.rgbValues[2] = "0";
+			this.rgbValues = [0,0,0];
 			
 			this.gameState = 0;
 			
@@ -62,9 +61,12 @@ app.match = {
 			this.practiceButtons[2] = new app.Button(this.ctx,this.WIDTH - 150,this.HEIGHT - 70,"practice","Pause","#0000cc","blue",100,50,30,function(){app.buttonControls.pause()});
 			
 			//NEED FUNCTION TO POPULATE BUTTONS and CHANGE DO FUNCTIONS FOR OTHER BUTTONS
-			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
-			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/4) ,"menu","Orbital Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Play Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/4) ,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
 			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/2),"menu","How To Play","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+
+			this.pauseButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2 - 50,this.HEIGHT * 1/3,"practice","Resume","green","#009900",100,50,25,function(){app.buttonControls.pause()});
+			this.pauseButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2 - 50,this.HEIGHT * 1/3 + 75,"practice","Quit","#DB0000","red",100,50,25,function(){app.buttonControls.quit()});
 
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
@@ -73,10 +75,23 @@ app.match = {
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
-			//Set initial alphas
+			//Set initial alphas MAYBE ANOTHER INTIAL FUNCTION?
 			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 			
 			this.update();
+	},
+
+	resetGameGlobals: function(){
+		this.paused = false;
+		this.correctCounter = 0;
+		this.correctGuesses = 0;
+		this.dragging = false;
+		this.selectedSlider = undefined;
+		this.rgbValues = [0,0,0];
+		//Set initial guess
+		this.colorMatches = this.utils.setRandomColorAnswer();
+		//Set initial alphas MAYBE ANOTHER INTIAL FUNCTION?
+		this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 	},
 	
 	//GAME LOOP
@@ -99,13 +114,23 @@ app.match = {
 		}
 		else if(this.gameState == 1)
 		{
-			this.updatePractice();
+			if(!this.paused)
+			{
+				this.updatePractice();
 			
-			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
+				this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 
-			this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,this.backgroundAlphas);
+				this.drawLib.drawPracticeBackground(this.ctx,this.WIDTH,this.HEIGHT,this.backgroundAlphas);
 
-			this.drawPractice();
+				this.drawPractice();
+			}
+			else
+			{
+				for(var i=0; i < this.pauseButtons.length;i++)
+				{
+					this.pauseButtons[i].update(this.mousePos);
+				}
+			}
 		}
 
 		this.drawGUI(this.ctx);
@@ -130,6 +155,21 @@ app.match = {
 			for(var i=0; i < this.practiceButtons.length;i++)
 			{
 				this.practiceButtons[i].draw(ctx);
+			}
+
+			if(this.paused)
+			{	
+				ctx.save();
+				ctx.fillStyle = "white";
+				ctx.fillRect(this.WIDTH * 1/2 - 100,this.HEIGHT * 1/3 - 35,200,200);
+				ctx.fillStyle = "rgba(0,0,255,.8)";
+				ctx.fillRect(this.WIDTH * 1/2 - 100,this.HEIGHT * 1/3 - 35,200,200);
+				ctx.restore();
+
+				for(var i=0; i < this.pauseButtons.length;i++)
+				{
+					this.pauseButtons[i].draw(ctx);
+				}
 			}
 		}
 	},
@@ -227,13 +267,13 @@ app.match = {
 			{
 				//Draw the two circles
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]),parseInt(this.rgbValues[1]),parseInt(this.rgbValues[2])));
 			}
 			else
 			{
 				//Draw the two circles next to each other
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]), parseInt(this.rgbValues[1]), parseInt(this.rgbValues[2])));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]),parseInt(this.rgbValues[1]),parseInt(this.rgbValues[2])));
 			}
 		}
 	},
@@ -244,24 +284,28 @@ app.match = {
 		var mouse = {}
 		mouse.x = e.pageX - e.target.offsetLeft;
 		mouse.y = e.pageY - e.target.offsetTop;
-		for(var i = 1; i < 4; i++)
+
+		if(!app.match.paused)
 		{
-			if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y,5))
+			for(var i = 1; i < 4; i++)
 			{
-				if(i==1)
+				if(app.utils.mouseContains(app.utils.mapValue(app.match.rgbValues[i - 1],0,255,app.utils.findSliderXStart(i),app.utils.findSliderXEnd(i)),380,15,15,mouse.x,mouse.y,5))
 				{
-					console.log("1");
-					app.match.selectedSlider = 1;
-				}
-				else if(i==2)
-				{
-					console.log("2");
-					app.match.selectedSlider = 2;
-				}
-				else
-				{
-					console.log("3");
-					app.match.selectedSlider = 3;
+					if(i==1)
+					{
+						//console.log("1");
+						app.match.selectedSlider = 1;
+					}
+					else if(i==2)
+					{
+						//console.log("2");
+						app.match.selectedSlider = 2;
+					}
+					else
+					{
+						//console.log("3");
+						app.match.selectedSlider = 3;
+					}
 				}
 			}
 		}
@@ -271,34 +315,35 @@ app.match = {
 
 		var mouse = app.match.getMouse(e);
 
-		if(app.match.dragging)
+		if(!app.match.paused)
 		{
-			if(app.match.selectedSlider == 1)
+			if(app.match.dragging)
 			{
-				if(mouse.x > app.utils.findSliderXStart(1) && mouse.x < app.utils.findSliderXEnd(1))
+				if(app.match.selectedSlider == 1)
 				{
-					app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(1),app.utils.findSliderXEnd(1),0,255);
+					if(mouse.x > app.utils.findSliderXStart(1) && mouse.x < app.utils.findSliderXEnd(1))
+					{
+						app.match.rgbValues[0] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(1),app.utils.findSliderXEnd(1),0,255);
+					}
 				}
-			}
-			else if(app.match.selectedSlider == 2)
-			{
-				if(mouse.x > app.utils.findSliderXStart(2) && mouse.x < app.utils.findSliderXEnd(2))
+				else if(app.match.selectedSlider == 2)
 				{
-					app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(2),app.utils.findSliderXEnd(2),0,255);
+					if(mouse.x > app.utils.findSliderXStart(2) && mouse.x < app.utils.findSliderXEnd(2))
+					{
+						app.match.rgbValues[1] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(2),app.utils.findSliderXEnd(2),0,255);
+					}
 				}
-			}
-			else if(app.match.selectedSlider == 3)
-			{
-				if(mouse.x > app.utils.findSliderXStart(3) && mouse.x < app.utils.findSliderXEnd(3))
+				else if(app.match.selectedSlider == 3)
 				{
-					app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(3),app.utils.findSliderXEnd(3),0,255);
-					console.log(app.match.rgbValues[2]);
+					if(mouse.x > app.utils.findSliderXStart(3) && mouse.x < app.utils.findSliderXEnd(3))
+					{
+						app.match.rgbValues[2] = app.utils.mapValue(mouse.x,app.utils.findSliderXStart(3),app.utils.findSliderXEnd(3),0,255);
+					}
 				}
 			}
 		}
 
 		app.match.mousePos = mouse;
-
 	},
 
 	doMouseUp: function(e){

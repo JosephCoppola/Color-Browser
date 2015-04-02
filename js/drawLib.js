@@ -161,6 +161,8 @@ app.drawLib = {
 				ctx.arc(w/2,h/2,circle.radius,0,2*Math.PI,false);
 				ctx.fill();
 			}
+
+			ctx.restore();
 		},
 	 
 		rect: function(ctx,x,y,w,h,col){
