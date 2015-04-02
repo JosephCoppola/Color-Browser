@@ -72,6 +72,7 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmouseout = this.doMouseOut;
+			window.onblur = function(){app.match.paused = true;};
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
@@ -132,6 +133,10 @@ app.match = {
 				}
 			}
 		}
+		else if(this.gameState == 2)
+		{
+
+		}
 
 		this.drawGUI(this.ctx);
 	},
@@ -164,6 +169,7 @@ app.match = {
 				ctx.fillRect(this.WIDTH * 1/2 - 100,this.HEIGHT * 1/3 - 35,200,200);
 				ctx.fillStyle = "rgba(0,0,255,.8)";
 				ctx.fillRect(this.WIDTH * 1/2 - 100,this.HEIGHT * 1/3 - 35,200,200);
+				ctx.fillRect(this.WIDTH * 1/2 - 90,this.HEIGHT * 1/3 - 25,180,180);
 				ctx.restore();
 
 				for(var i=0; i < this.pauseButtons.length;i++)
