@@ -72,7 +72,7 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmouseout = this.doMouseOut;
-			window.onblur = function(){app.match.paused = true;};
+			//window.onblur = function(){app.match.paused = true;};
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
