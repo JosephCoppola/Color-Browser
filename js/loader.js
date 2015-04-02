@@ -24,6 +24,7 @@ app.IMAGES = {
 window.onload = function(){
 	console.log("window.onload called");
 	app.match.app = app;
+	app.match.levels = app.levelsFile;
 	app.match.drawLib = app.drawLib;
 	app.match.utils = app.utils;
 	app.match.buttonControls = app.buttonControls;

@@ -20,6 +20,7 @@ app.match = {
 	drawLib: undefined,
 	utils: undefined,
 	buttonControls : undefined, 
+	levels : undefined,
 	dt: 1/60.0,
 	//Holds Slider Values
 	rgbValues : [],
@@ -28,7 +29,7 @@ app.match = {
 	menuButtons : [],
 	pauseButtons : [],
 	playButtons : [],
-	levels : [],
+	levelsArray : [],
 	//Alpha values used to draw practice mode background
 	backgroundAlphas : [],
 	//Slider Logic
@@ -60,6 +61,8 @@ app.match = {
 			this.rgbValues = [0,0,0];
 			
 			this.gameState = 0;
+
+			this.levelsArray = app.utils.loadLevels(this.levels.allLevels);
 			
 			this.practiceButtons[0] = new app.Button(this.ctx,50,25,"practice","Hard","#DB0000","red",100,50,30,function(){app.buttonControls.difficulty(app.match.difficulty)});
 			this.practiceButtons[1] = new app.Button(this.ctx,50,this.HEIGHT - 70,"practice","Skip","green","#009900",100,50,30,function(){app.buttonControls.skipColor()});
@@ -78,11 +81,11 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmouseout = this.doMouseOut;
-			window.onblur = function(){app.match.paused = true;};
+			window.onblur = function(){app.match.paused = true; app.match.canvas.onmousedown = app.match.doMouseDown; app.match.canvas.onmousemove = app.match.doMouseMove;};
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
-			//Set initial alphas MAYBE ANOTHER INTIAL FUNCTION?
+			//Set initial alphas
 			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 			
 			this.update();
@@ -95,6 +98,8 @@ app.match = {
 		this.dragging = false;
 		this.selectedSlider = undefined;
 		this.rgbValues = [0,0,0];
+		this.gTime = 0;
+		this.elapsed = 0;
 		//Set initial guess
 		this.colorMatches = this.utils.setRandomColorAnswer();
 		//Set initial alphas MAYBE ANOTHER INTIAL FUNCTION?
@@ -249,15 +254,22 @@ app.match = {
 	updateGame: function(){
 		var correctAndAlphas = [];
 
-		if(this.difficulty)
+		if(this.gameState == 1)
 		{
-			//If Hard checking the answer
-			//ADJUST LEEWAY FOR HARD MODE
-			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5,this.difficulty);
+			if(this.difficulty)
+			{
+				//If Hard checking the answer
+				//ADJUST LEEWAY FOR HARD MODE
+				correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,5,this.difficulty);
+			}
+			else
+			{
+				correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,10,this.difficulty);
+			}
 		}
-		else
+		else if(this.gameState == 2)
 		{
-			correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,10,this.difficulty);
+			correctAndAlphas = this.utils.checkAnswer(this.levelsArray[0].colors,this.rgbValues,8,this.difficulty);
 		}
 
 		//Set correct if not already correct, used for radius animation
@@ -284,9 +296,23 @@ app.match = {
 
 		if(this.correct && this.correctCounter == 0)
 		{
-			this.colorMatches = this.utils.setRandomColorAnswer();
+			if(this.gameState == 1)
+			{
+				this.colorMatches = this.utils.setRandomColorAnswer();
+			}
+			else if(this.gameState == 2)
+			{
+				if(this.levelsArray[0].completed)
+				{
+					this.levelsArray.splice(0,1);
+				}
+				else
+				{
+					this.levelsArray[0].colors.splice(0,3);
+					this.colorMatches = [this.levelsArray[0].colors[0],this.levelsArray[0].colors[1],this.levelsArray[0].colors[2]];
+				}
+			}
 		}
-	
 	},
 	
 	//Draw sprites for the practice mode
@@ -327,18 +353,27 @@ app.match = {
 		}
 		else
 		{
-			//If hard mode
-			if(this.difficulty)
+			if(this.gameState == 1)
+			{
+				//If hard mode
+				if(this.difficulty)
+				{
+					//Draw the two circles
+					this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+					this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]),parseInt(this.rgbValues[1]),parseInt(this.rgbValues[2])));
+				}
+				else
+				{
+					//Draw the two circles next to each other
+					this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+					this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]),parseInt(this.rgbValues[1]),parseInt(this.rgbValues[2])));
+				}
+			}
+			else if(this.gameState == 2)
 			{
 				//Draw the two circles
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
+				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3,200,60,this.utils.makeColor(this.levelsArray[0].colors[0],this.levelsArray[0].colors[1],this.levelsArray[0].colors[2]));
 				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]),parseInt(this.rgbValues[1]),parseInt(this.rgbValues[2])));
-			}
-			else
-			{
-				//Draw the two circles next to each other
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 1/3 + 75,200,60,this.utils.makeColor(this.colorMatches[0],this.colorMatches[1],this.colorMatches[2]));
-				this.drawLib.feedbackColor(this.ctx,this.WIDTH * 2/3 - 75,200,60,this.utils.makeColor(parseInt(this.rgbValues[0]),parseInt(this.rgbValues[1]),parseInt(this.rgbValues[2])));
 			}
 		}
 	},

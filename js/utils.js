@@ -195,6 +195,18 @@ app.utils = function(){
 
 		return centroid; 
 	}
+
+	function loadLevels(levelsArray)
+	{
+		var arrayOfLevelObjects = [];
+
+		for(var i = 0; i < levelsArray.length; i++)
+		{
+			arrayOfLevelObjects.push(new app.Level(levelsArray[i].level,levelsArray[i].rgbValues,levelsArray[i].time));
+		}
+
+		return arrayOfLevelObjects;
+	}
 	
 	// the "public interface" of this module
 	return{
@@ -209,6 +221,7 @@ app.utils = function(){
 		findSliderXEnd : findSliderXEnd,
 		checkAnswer : checkAnswer,
 		makeFont : makeFont,
-		getCentroid : getCentroid
+		getCentroid : getCentroid,
+		loadLevels : loadLevels
 	};
 }(); 
