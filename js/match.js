@@ -81,7 +81,7 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmouseout = this.doMouseOut;
-			window.onblur = function(){app.match.paused = true; app.match.canvas.onmousedown = app.match.doMouseDown; app.match.canvas.onmousemove = app.match.doMouseMove;};
+			window.onblur = function(){if(app.match.gameState != 0){app.match.paused = true; app.match.canvas.onmousedown = app.match.doMouseDown; app.match.canvas.onmousemove = app.match.doMouseMove;}};
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
@@ -123,6 +123,8 @@ app.match = {
 			{
 				this.menuButtons[i].update(this.mousePos);
 			}
+
+			this.drawGUI(this.ctx);
 		}
 		//Practice Mode
 		else if(this.gameState == 1)
@@ -150,6 +152,8 @@ app.match = {
 					this.pauseButtons[i].update(this.mousePos);
 				}
 			}
+
+			this.drawGUI(this.ctx);
 		}
 		//Play Mode
 		else if(this.gameState == 2)
@@ -181,9 +185,25 @@ app.match = {
 					this.pauseButtons[i].update(this.mousePos);
 				}
 			}
-		}
 
-		this.drawGUI(this.ctx);
+			if(this.levelsArray.length == 0)
+			{
+				this.gameState = 3;
+				return;
+			}
+
+			this.drawGUI(this.ctx);
+		}
+		else if(this.gameState == 3)
+		{
+			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
+
+			this.ctx.save();
+			this.ctx.fillStyle = "black";
+			this.ctx.font="20px Georgia";
+			this.ctx.fillText("You have completed all the levels, more coming soon!",this.WIDTH/2,this.HEIGHT/2);
+			this.ctx.restore();
+		}
 	},
 		
 	drawGUI: function(ctx){
@@ -226,7 +246,7 @@ app.match = {
 		else if(this.gameState == 2)
 		{
 			this.drawLib.drawScore(this.ctx,this.WIDTH * .76,this.HEIGHT * .1,this.correctGuesses,27);
-			this.drawLib.drawTime(this.ctx,this.WIDTH * .12,this.HEIGHT * .1,this.gTime,27);
+			this.drawLib.drawTime(this.ctx,this.WIDTH * .12,this.HEIGHT * .1,this.levelsArray[0].remainingTime,27);
 
 			for(var i=0; i < this.playButtons.length;i++)
 			{
@@ -267,9 +287,28 @@ app.match = {
 				correctAndAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,10,this.difficulty);
 			}
 		}
+		//Check for play mode
 		else if(this.gameState == 2)
 		{
-			correctAndAlphas = this.utils.checkAnswer(this.levelsArray[0].colors,this.rgbValues,8,this.difficulty);
+			//Update level, check answer
+			if(this.levelsArray[0].update(this.gTime))
+			{
+				this.gameState = 3;
+			}
+			else
+			{
+
+			}
+
+			if(this.levelsArray[0].completed)
+			{
+				this.levelsArray.splice(0,1);
+				correctAndAlphas = {correct:false,alphas:[.3,.3,.3]};
+			}
+			else
+			{
+				correctAndAlphas = this.utils.checkAnswer(this.levelsArray[0].colors,this.rgbValues,8,this.difficulty);
+			}
 		}
 
 		//Set correct if not already correct, used for radius animation
@@ -304,7 +343,7 @@ app.match = {
 			{
 				if(this.levelsArray[0].completed)
 				{
-					this.levelsArray.splice(0,1);
+					
 				}
 				else
 				{

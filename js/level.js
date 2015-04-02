@@ -15,14 +15,21 @@ app.Level = function(){
 	
 	var l = Level.prototype;
 	
-		l.update = function(elapsedTime,guesses)
+		l.update = function(elapsedTime)
 		{
+			if(this.remainingTime == 0)
+			{
+				return true;
+			}
+
 			this.remainingTime = this.time - elapsedTime;
 			
 			if(this.colors.length == 0)
 			{
 				this.completed = true;
 			}
+
+			return false;
 		};
 	
 	// the "prototype" of this module

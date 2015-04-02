@@ -3,6 +3,6 @@ var app = app || {};
 
 app.levelsFile = {
 
-	allLevels: [{level:1,rgbValues:[255,0,0,0,255,0],time:120}],
+	allLevels: [{level:1,rgbValues:[250,0,0,0,250,0,0,0,250],time:120}],
 
 }; 
