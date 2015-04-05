@@ -29,7 +29,9 @@ app.match = {
 	menuButtons : [],
 	pauseButtons : [],
 	playButtons : [],
+	//Array to hold levels and completed levels
 	levelsArray : [],
+	completedLevels : [],
 	//Alpha values used to draw practice mode background
 	backgroundAlphas : [],
 	//Slider Logic
@@ -87,7 +89,7 @@ app.match = {
 			//Set initial alphas
 			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 			
-			this.soundtrack = createjs.Sound.play("soundtrack",{loop:-1,volume:0.4});
+			//this.soundtrack = createjs.Sound.play("soundtrack",{loop:-1,volume:0.4});
 
 			this.update();
 	},
@@ -169,6 +171,12 @@ app.match = {
 			//Not paused
 			if(!this.paused)
 			{
+				if(this.levelsArray.length == 0)
+				{
+					this.gameState = 3;
+					return;
+				}
+
 				this.updateGame();
 			
 				this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
@@ -192,12 +200,6 @@ app.match = {
 				{
 					this.pauseButtons[i].update(this.mousePos);
 				}
-			}
-
-			if(this.levelsArray.length == 0)
-			{
-				this.gameState = 3;
-				return;
 			}
 
 			this.drawGUI(this.ctx);
@@ -301,17 +303,23 @@ app.match = {
 			//Update level, check answer
 			if(this.levelsArray[0].update(this.gTime))
 			{
+				//Ran out of time
 				this.gameState = 3;
-			}
-			else
-			{
-
+				return;
 			}
 
+			//If level is completed
 			if(this.levelsArray[0].completed)
 			{
-				this.levelsArray.splice(0,1);
-				correctAndAlphas = {correct:false,alphas:[.3,.3,.3]};
+				//Splice off finished level, add to completed list
+				this.completedLevels.push(this.levelsArray.splice(0,1));
+
+				//NEED CHECK FOR REMAINING LEVELS
+
+				this.elapsed = 0;
+				this.colorMatches = [this.levelsArray[0].colors[0],this.levelsArray[0].colors[1],this.levelsArray[0].colors[2]];
+				return;
+				//correctAndAlphas = {correct:false,alphas:[.3,.3,.3]};
 			}
 			else
 			{
@@ -326,34 +334,36 @@ app.match = {
 			this.correct = correctAndAlphas.correct;
 		}
 
+		//Background Alphas set by correctAndAlphas.alphas
 		this.backgroundAlphas = correctAndAlphas.alphas;
 		
+		//Last Frame of correct animation
 		if(this.correct && this.correctCounter == 300)
 		{
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmousedown = this.doMouseDown;
 			this.correct = false;
 			this.correctCounter = 0;
+		}
+
+		//First frame of correct answer
+		if(this.correct && this.correctCounter == 0)
+		{
 			this.correctGuesses++;
+
 			for(var i = 0; i < this.rgbValues.length; i++)
 			{
 				this.rgbValues[i] = 0;
 			}
-		}
 
-		if(this.correct && this.correctCounter == 0)
-		{
 			if(this.gameState == 1)
 			{
 				this.colorMatches = this.utils.setRandomColorAnswer();
 			}
 			else if(this.gameState == 2)
 			{
-				if(this.levelsArray[0].completed)
-				{
-					
-				}
-				else
+				//If level is complete
+				if(!this.levelsArray[0].completed)
 				{
 					this.levelsArray[0].colors.splice(0,3);
 					this.colorMatches = [this.levelsArray[0].colors[0],this.levelsArray[0].colors[1],this.levelsArray[0].colors[2]];
