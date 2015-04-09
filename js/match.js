@@ -61,6 +61,9 @@ app.match = {
 			this.ctx = this.canvas.getContext('2d');
 			this.rgbValues = [0,0,0];
 			
+			this.image = new Image();
+			this.image.src = "ProgressPics/How to Play Practice.PNG";
+			
 			this.gameState = 0;
 
 			this.levelsArray = app.utils.loadLevels(this.levels.allLevels);
@@ -73,10 +76,13 @@ app.match = {
 
 			this.menuButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2,this.HEIGHT * 1/3,"menu","Play Mode","white","yellow",100,50,35,function(){app.buttonControls.playMode()});
 			this.menuButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/4) ,"menu","Practice Mode","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
-			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/2),"menu","How To Play","white","yellow",100,50,35,function(){app.buttonControls.practiceMode()});
+			this.menuButtons[2] = new app.Button(this.ctx,this.WIDTH * 1/2,(this.HEIGHT * 1/3) + (this.HEIGHT * 1/2),"menu","How To Play","white","yellow",100,50,35,function(){app.buttonControls.howTo()});
 
 			this.pauseButtons[0] = new app.Button(this.ctx,this.WIDTH * 1/2 - 50,this.HEIGHT * 1/3,"practice","Resume","green","#009900",100,50,25,function(){app.buttonControls.pause()});
 			this.pauseButtons[1] = new app.Button(this.ctx,this.WIDTH * 1/2 - 50,this.HEIGHT * 1/3 + 75,"practice","Quit","#DB0000","red",100,50,25,function(){app.buttonControls.quit()});
+			
+			this.returnButton = new app.Button(this.ctx,this.WIDTH * 1/2 - 50,this.HEIGHT * 1/3,"practice","Return","#DB0000","red",100,50,25,function(){app.buttonControls.quit()});
+			this.returnButton2 = new app.Button(this.ctx,this.WIDTH * 4/5,0 + 15,"menu","Return","black","yellow",100,50,25,function(){app.buttonControls.quit()});
 
 			this.canvas.onmousedown = this.doMouseDown;
 			this.canvas.onmouseup = this.doMouseUp;
@@ -89,7 +95,7 @@ app.match = {
 			//Set initial alphas
 			this.backgroundAlphas = this.utils.checkAnswer(this.colorMatches,this.rgbValues,0,this.difficulty).alphas;
 			
-			//this.soundtrack = createjs.Sound.play("soundtrack",{loop:-1,volume:0.4});
+			this.soundtrack = createjs.Sound.play("soundtrack",{loop:-1,volume:0.4});
 
 			this.update();
 	},
@@ -211,8 +217,18 @@ app.match = {
 			this.ctx.save();
 			this.ctx.fillStyle = "black";
 			this.ctx.font="20px Georgia";
-			this.ctx.fillText("You have completed all the levels, more coming soon!",this.WIDTH/2,this.HEIGHT/2);
+			this.ctx.fillText("You have completed all the levels, more coming soon!",this.WIDTH/2 - 230,this.HEIGHT/2);
 			this.ctx.restore();
+			
+			this.returnButton.update(this.mousePos);
+			this.returnButton.draw(this.ctx);
+		}
+		else if(this.gameState == 4)
+		{
+			this.drawLib.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
+			this.ctx.drawImage(this.image,0,0);
+			this.returnButton2.update(this.mousePos);
+			this.returnButton2.draw(this.ctx);
 		}
 	},
 		
@@ -311,6 +327,10 @@ app.match = {
 			//If level is completed
 			if(this.levelsArray[0].completed)
 			{
+				if(this.levelArray.Count == 0)
+				{
+					return;
+				}
 				//Splice off finished level, add to completed list
 				this.completedLevels.push(this.levelsArray.splice(0,1));
 
@@ -323,7 +343,7 @@ app.match = {
 			}
 			else
 			{
-				correctAndAlphas = this.utils.checkAnswer(this.levelsArray[0].colors,this.rgbValues,8,this.difficulty);
+				correctAndAlphas = this.utils.checkAnswer(this.levelsArray[0].colors,this.rgbValues,15,this.difficulty);
 			}
 		}
 
