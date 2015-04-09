@@ -62,7 +62,7 @@ app.match = {
 			this.rgbValues = [0,0,0];
 			
 			this.image = new Image();
-			this.image.src = "ProgressPics/How to Play Practice.PNG";
+			this.image.src = "ProgressPics/HowtoPlayPractice.png";
 			
 			this.gameState = 0;
 
@@ -88,7 +88,7 @@ app.match = {
 			this.canvas.onmouseup = this.doMouseUp;
 			this.canvas.onmousemove = this.doMouseMove;
 			this.canvas.onmouseout = this.doMouseOut;
-			window.onblur = function(){if(app.match.gameState != 0){app.match.paused = true; app.match.canvas.onmousedown = app.match.doMouseDown; app.match.canvas.onmousemove = app.match.doMouseMove;}};
+			//window.onblur = function(){if(app.match.gameState != 0){app.match.paused = true; app.match.canvas.onmousedown = app.match.doMouseDown; app.match.canvas.onmousemove = app.match.doMouseMove;}};
 			
 			//Set initial guess
 			this.colorMatches = this.utils.setRandomColorAnswer();
