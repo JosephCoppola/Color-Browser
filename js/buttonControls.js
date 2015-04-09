@@ -40,6 +40,11 @@ app.buttonControls = function(){
 	{
 		app.match.gameState = 2;
 	}
+	
+	function howTo()
+	{
+		app.match.gameState = 4;
+	}
 
 	function skipColor()
 	{
@@ -65,5 +70,6 @@ app.buttonControls = function(){
 		skipColor : skipColor,
 		pause : pause,
 		quit : quit,
+		howTo : howTo,
 	};
 }(); 
