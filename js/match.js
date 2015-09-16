@@ -327,7 +327,7 @@ app.match = {
 			//If level is completed
 			if(this.levelsArray[0].completed)
 			{
-				if(this.levelArray.Count == 0)
+				if(this.levelsArray.Count == 0)
 				{
 					return;
 				}
